@@ -1,0 +1,348 @@
+Created At: 2026-06-17T17:23:30Z
+Completed At: 2026-06-17T17:23:30Z
+File Path: `file:///C:/Users/Thoro/OneDrive/Desktop/vaccine%202.0/index.html`
+Total Lines: 787
+Total Bytes: 40497
+Showing lines 1 to 100
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: <!DOCTYPE html>
+2: <html lang="en">
+3: <head>
+4:     <meta charset="UTF-8">
+5:     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6:     <title>TrackUrVaccine | Karnataka Veterinary Dept.</title>
+7:     <meta name="description" content="Smart Livestock Vaccination Monitoring & Fraud Detection for the Karnataka Department of Animal Husbandry.">
+8:     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+9:     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+10:     <style>
+11:         :root {
+12:             --primary: #1a73e8;
+13:             --primary-hover: #174ea6;
+14:             --surface: #ffffff;
+15:             --background: #f1f3f4;
+16:             --text-main: #202124;
+17:             --text-secondary: #5f6368;
+18:             --border: #dadce0;
+19:             --shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+20:             --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+21:             --high-risk: #d93025;
+22:             --warning: #f29900;
+23:             --safe: #188038;
+24:         }
+25: 
+26:         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', -apple-system, sans-serif; }
+27: 
+28:         body { background: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+29: 
+30:         /* ---------- Buttons ---------- */
+31:         .btn {
+32:             background: var(--primary); color: #fff; border: none;
+33:             padding: 10px 24px; font-size: .875rem; font-weight: 500;
+34:             border-radius: 4px; cursor: pointer; text-transform: uppercase;
+35:             letter-spacing: .5px; transition: background .2s, box-shadow .2s;
+36:             box-shadow: 0 1px 2px rgba(0,0,0,.1);
+37:         }
+38:         .btn:hover { background: var(--primary-hover); box-shadow: var(--shadow-sm); }
+39:         .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--border); box-shadow: none; }
+40:         .btn-outline:hover { background: rgba(26,115,232,.04); border-color: var(--primary); }
+41: 
+42:         /* ---------- View Engine ---------- */
+43:         .view-container { display: none; flex: 1; flex-direction: column; width: 100%; }
+44:         .view-container.active { display: flex; }
+45:         #app-shell { display: none; flex-direction: column; min-height: 100vh; }
+46: 
+47:         /* ---------- VIEW A: Login ---------- */
+48:         #view-login {
+49:             /* display controlled by .active class */
+50:             align-items: center; justify-content: center;
+51:             min-height: 100vh; background: var(--background); padding: 20px;
+52:         }
+53:         .login-card {
+54:             background: var(--surface); border: 1px solid var(--border);
+55:             border-radius: 8px; padding: 40px; width: 100%; max-width: 450px;
+56:             text-align: center; box-shadow: var(--shadow-md);
+57:         }
+58:         .login-card .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; color: var(--primary); }
+59:         .login-card h2 { font-weight: 400; font-size: 24px; margin-bottom: 10px; }
+60:         .login-card p  { color: var(--text-secondary); margin-bottom: 20px; }
+61:         .input-group { text-align: left; margin-bottom: 20px; }
+62:         .input-group input {
+63:             width: 100%; padding: 13px 15px; font-size: 16px;
+64:             border: 1px solid var(--border); border-radius: 4px; outline: none; transition: border-color .2s;
+65:         }
+66:         .input-group input:focus { border-color: var(--primary); border-width: 2px; padding: 12px 14px; }
+67:         .login-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+68: 
+69:         /* ---------- Navbar ---------- */
+70:         nav {
+71:             background: var(--surface); border-bottom: 1px solid var(--border);
+72:             padding: 0 24px; height: 64px; display: flex; align-items: center;
+73:             justify-content: space-between; position: sticky; top: 0; z-index: 1000;
+74:         }
+75:         .nav-brand { font-size: 20px; font-weight: 500; color: var(--text-main); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+76:         .nav-links { display: flex; gap: 8px; align-items: center; }
+77:         .nav-item {
+78:             color: var(--text-secondary); text-decoration: none; font-size: 14px;
+79:             font-weight: 500; cursor: pointer; padding: 8px 16px; border-radius: 4px;
+80:             transition: background .2s, color .2s;
+81:         }
+82:         .nav-item:hover, .nav-item.active { background: rgba(26,115,232,.08); color: var(--primary); }
+83: 
+84:         /* ---------- VIEW B: Home ---------- */
+85:         #view-home { background: var(--background); padding-bottom: 60px; }
+86:         .hero {
+87:             background: linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)),
+88:                         url('https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=1600&q=80') center/cover;
+89:             padding: 80px 20px; text-align: center; border-bottom: 1px solid var(--border);
+90:         }
+91:         .hero h1 { font-size: 36px; font-weight: 400; margin-bottom: 16px; }
+92:         .hero p  { font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto; line-height: 1.6; }
+93: 
+94:         .stats-container {
+95:             max-width: 1200px; margin: -40px auto 40px; padding: 0 20px;
+96:             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+97:             gap: 20px; position: relative; z-index: 10;
+98:         }
+99:         .stat-card {
+100:             background: var(--surface); padding: 24px; border-radius: 8px;
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-06-17T17:50:13Z
+Completed At: 2026-06-17T17:50:13Z
+File Path: `file:///C:/Users/Thoro/OneDrive/Desktop/vaccine%202.0/index.html`
+Total Lines: 872
+Total Bytes: 48855
+Showing lines 1 to 230
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: <!DOCTYPE html>
+2: <html lang="en">
+3: <head>
+4:     <meta charset="UTF-8">
+5:     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6:     <title>TrackUrVaccine | Karnataka Veterinary Dept.</title>
+7:     <meta name="description" content="Smart Livestock Vaccination Monitoring & Fraud Detection for the Karnataka Department of Animal Husbandry.">
+8:     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+9:     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+10:     <style>
+11:         :root {
+12:             --primary: #1a73e8;
+13:             --primary-hover: #174ea6;
+14:             --surface: #ffffff;
+15:             --background: #f1f3f4;
+16:             --text-main: #202124;
+17:             --text-secondary: #5f6368;
+18:             --border: #dadce0;
+19:             --shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+20:             --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+21:             --high-risk: #d93025;
+22:             --warning: #f29900;
+23:             --safe: #188038;
+24:         }
+25: 
+26:         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', -apple-system, sans-serif; }
+27: 
+28:         body { background: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+29: 
+30:         /* ---------- Buttons ---------- */
+31:         .btn {
+32:             background: var(--primary); color: #fff; border: none;
+33:             padding: 10px 24px; font-size: .875rem; font-weight: 500;
+34:             border-radius: 4px; cursor: pointer; text-transform: uppercase;
+35:             letter-spacing: .5px; transition: background .2s, box-shadow .2s;
+36:             box-shadow: 0 1px 2px rgba(0,0,0,.1);
+37:         }
+38:         .btn:hover { background: var(--primary-hover); box-shadow: var(--shadow-sm); }
+39:         .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--border); box-shadow: none; }
+40:         .btn-outline:hover { background: rgba(26,115,232,.04); border-color: var(--primary); }
+41: 
+42:         /* ---------- View Engine ---------- */
+43:         .view-container { display: none; flex: 1; flex-direction: column; width: 100%; }
+44:         .view-container.active { display: flex; }
+45:         #app-shell { display: none; flex-direction: column; min-height: 100vh; }
+46: 
+47:         /* ---------- VIEW A: Login ---------- */
+48:         #view-login {
+49:             /* display controlled by .active class */
+50:             align-items: center; justify-content: center;
+51:             min-height: 100vh; background: var(--background); padding: 20px;
+52:         }
+53:         .login-card {
+54:             background: var(--surface); border: 1px solid var(--border);
+55:             border-radius: 8px; padding: 40px; width: 100%; max-width: 450px;
+56:             text-align: center; box-shadow: var(--shadow-md);
+57:         }
+58:         .login-card .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; color: var(--primary); }
+59:         .login-card h2 { font-weight: 400; font-size: 24px; margin-bottom: 10px; }
+60:         .login-card p  { color: var(--text-secondary); margin-bottom: 20px; }
+61:         .input-group { text-align: left; margin-bottom: 20px; }
+62:         .input-group input {
+63:             width: 100%; padding: 13px 15px; font-size: 16px;
+64:             border: 1px solid var(--border); border-radius: 4px; outline: none; transition: border-color .2s;
+65:         }
+66:         .input-group input:focus { border-color: var(--primary); border-width: 2px; padding: 12px 14px; }
+67:         .login-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+68: 
+69:         /* ---------- Navbar ---------- */
+70:         nav {
+71:             background: var(--surface); border-bottom: 1px solid var(--border);
+72:             padding: 0 24px; height: 64px; display: flex; align-items: center;
+73:             justify-content: space-between; position: sticky; top: 0; z-index: 1000;
+74:         }
+75:         .nav-brand { font-size: 20px; font-weight: 500; color: var(--text-main); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+76:         .nav-links { display: flex; gap: 8px; align-items: center; }
+77:         .nav-item {
+78:             color: var(--text-secondary); text-decoration: none; font-size: 14px;
+79:             font-weight: 500; cursor: pointer; padding: 8px 16px; border-radius: 4px;
+80:             transition: background .2s, color .2s;
+81:         }
+82:         .nav-item:hover, .nav-item.active { background: rgba(26,115,232,.08); color: var(--primary); }
+83: 
+84:         /* ---------- VIEW B: Home ---------- */
+85:         #view-home { background: var(--background); padding-bottom: 60px; }
+86:         .hero {
+87:             background: linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)),
+88:                         url('https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=1600&q=80') center/cover;
+89:             padding: 80px 20px; text-align: center; border-bottom: 1px solid var(--border);
+90:         }
+91:         .hero h1 { font-size: 36px; font-weight: 400; margin-bottom: 16px; }
+92:         .hero p  { font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto; line-height: 1.6; }
+93: 
+94:         .stats-container {
+95:             max-width: 1200px; margin: -40px auto 40px; padding: 0 20px;
+96:             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+97:             gap: 20px; position: relative; z-index: 10;
+98:         }
+99:         .stat-card {
+100:             background: var(--surface); padding: 24px; border-radius: 8px;
+101:             box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+102:             display: flex; align-items: center; gap: 16px; transition: transform .2s;
+103:         }
+104:         .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+105:         .stat-icon {
+106:             width: 48px; height: 48px; border-radius: 50%;
+107:             background: rgba(26,115,232,.1); color: var(--primary);
+108:             display: flex; align-items: center; justify-content: center;
+109:         }
+110:         .stat-info h4 { font-size: 28px; font-weight: 500; margin-bottom: 4px; }
+111:         .stat-info p  { font-size: 14px; color: var(--text-secondary); }
+112: 
+113:         .content-section { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+114:         .section-title { font-size: 24px; font-weight: 500; margin-bottom: 24px; }
+115:         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 24px; margin-bottom: 60px; }
+116:         .edu-card {
+117:             background: var(--surface); border: 1px solid var(--border);
+118:             border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow .2s;
+119:         }
+120:         .edu-card:hover { box-shadow: var(--shadow-md); }
+121:         .edu-img { height: 160px; background-size: cover; background-position: center; }
+122:         .edu-content { padding: 20px; }
+123:         .edu-content h3 { font-size: 18px; font-weight: 500; margin-bottom: 10px; color: var(--primary); }
+124:         .edu-content p  { font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+125: 
+126:         .launch-banner {
+127:             background: #e8f0fe; border: 1px solid #c2e0ff;
+128:             border-radius: 8px; padding: 40px; text-align: center; margin-top: 40px;
+129:         }
+130:         .launch-banner h3 { font-size: 24px; font-weight: 400; margin-bottom: 16px; color: var(--primary-hover); }
+131: 
+132:         /* ---------- VIEW C: Tool ---------- */
+133:         #view-tool { padding: 40px 20px; max-width: 1400px; margin: 0 auto; }
+134:         .tool-header { margin-bottom: 30px; }
+135:         .tool-header h2 { font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+136: 
+137:         .upload-zone {
+138:             background: var(--surface); border: 2px dashed var(--border);
+139:             border-radius: 8px; padding: 60px 20px; text-align: center;
+140:             cursor: pointer; transition: all .2s; margin-bottom: 40px;
+141:         }
+142:         .upload-zone:hover, .upload-zone.dragover { background: #f8fbff; border-color: var(--primary); }
+143:         .upload-zone svg { width: 64px; height: 64px; fill: var(--primary); margin-bottom: 16px; }
+144:         #file-input { display: none; }
+145: 
+146:         /* --- Processing Overlay --- */
+147:         .processing-overlay {
+148:             display: none; flex-direction: column; align-items: center; justify-content: center;
+149:             background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+150:             box-shadow: var(--shadow-md); padding: 60px 40px; text-align: center; margin-bottom: 40px;
+151:         }
+152:         .processing-overlay.active { display: flex; }
+153:         .spinner {
+154:             width: 48px; height: 48px; border: 4px solid var(--border);
+155:             border-top-color: var(--primary); border-radius: 50%;
+156:             animation: spin .8s linear infinite; margin-bottom: 24px;
+157:         }
+158:         @keyframes spin { to { transform: rotate(360deg); } }
+159:         .processing-overlay h3 { font-size: 20px; font-weight: 400; margin-bottom: 12px; }
+160:         .processing-overlay .progress-track {
+161:             width: 300px; max-width: 100%; height: 4px; background: var(--border);
+162:             border-radius: 2px; overflow: hidden; margin-bottom: 32px;
+163:         }
+164:         .processing-overlay .progress-fill {
+165:             height: 100%; width: 0%; background: var(--primary);
+166:             border-radius: 2px; transition: width .25s linear;
+167:         }
+168:         .fact-text {
+169:             font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+170:             max-width: 520px; min-height: 44px; opacity: 1; transition: opacity .35s ease;
+171:         }
+172:         .fact-text.fade-out { opacity: 0; }
+173: 
+174:         /* --- Dashboard Results --- */
+175:         .dashboard-results { display: none; gap: 24px; flex-direction: column; }
+176:         .data-panel {
+177:             background: var(--surface); border: 1px solid var(--border);
+178:             border-radius: 8px; box-shadow: var(--shadow-sm); overflow: hidden;
+179:         }
+180:         .panel-header {
+181:             padding: 16px 24px; border-bottom: 1px solid var(--border);
+182:             display: flex; justify-content: space-between; align-items: center; background: #f8f9fa;
+183:         }
+184:         .panel-header h3 { font-size: 16px; font-weight: 500; }
+185:         .table-responsive { overflow-x: auto; max-height: 420px; }
+186:         table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+187:         th, td { padding: 12px 24px; border-bottom: 1px solid var(--border); font-size: 14px; }
+188:         th {
+189:             font-weight: 500; color: var(--text-secondary); position: sticky; top: 0;
+190:             background: var(--surface); box-shadow: 0 1px 0 var(--border); z-index: 10;
+191:         }
+192:         tr:hover td { background: rgba(0,0,0,.02); }
+193:         .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; display: inline-block; }
+194:         .badge.high-risk, .badge.overdue { background: #fce8e6; color: var(--high-risk); }
+195:         .badge.warning, .badge.due-week  { background: #fef7e0; color: var(--warning); }
+196:         .badge.safe, .badge.upcoming     { background: #e6f4ea; color: var(--safe); }
+197: 
+198:         /* ---------- Footer ---------- */
+199:         footer { background: #202124; color: #9aa0a6; padding: 40px 20px; margin-top: auto; }
+200:         .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
+201:         .footer-section h4 { color: #e8eaed; font-size: 16px; font-weight: 500; margin-bottom: 16px; }
+202:         .footer-section p  { font-size: 14px; line-height: 1.6; }
+203:         .footer-section a  { color: #8ab4f8; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
+204:         .footer-section a:hover { text-decoration: underline; }
+205:         .dev-credit {
+206:             border-top: 1px solid #3c4043; margin-top: 40px; padding-top: 20px;
+207:             font-size: 13px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
+208:         }
+209:         .dev-badge {
+210:             background: #3c4043; color: #e8eaed; padding: 8px 16px;
+211:             border-radius: 20px; display: inline-flex; flex-direction: column; align-items: center;
+212:         }
+213:         .dev-badge strong { color: #8ab4f8; font-size: 14px; }
+214:     </style>
+215: </head>
+216: <body>
+217: 
+218: <!-- ======================== VIEW A : LOGIN ======================== -->
+219: <div id="view-login" class="view-container active">
+220:     <div class="login-card">
+221:         <div class="brand">
+222:             <img src="./logo.png" alt="TrackUrVaccine Logo" style="height: 100px; width: 100px; object-fit: cover; border-radius: 50%;">
+223:         </div>
+224:         <h2>Sign in</h2>
+225:         <p>Department of Animal Husbandry &amp; Veterinary Services</p>
+226:         <p style="font-size:13px;color:var(--primary);background:#e8f0fe;padding:10px;border-radius:4px;margin-bottom:20px">
+227:             <strong>Demo Access:</strong><br>Email: admin@trackvax.in<br>Password: admin123
+228:         </p>
+229:         <div class="input-group"><input type="email" placeholder="Official Email Address" id="login-email"></div>
+230:         <div class="input-group"><input type="password" placeholder="Password" id="login-pwd"></div>
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+

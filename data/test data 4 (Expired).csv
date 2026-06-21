@@ -1,0 +1,4 @@
+Animal_ID,Animal_Type,Farmer_Name,Assigned_Village,GPS_Village,Vaccine_Name,Vaccination_Count,Time_Taken_Minute,Proof_Image_Name,Last_Vaccination_Date,Vaccine_Expiry_Date,Vaccination_Interval_Days
+KA-BGM-4001,Buffalo,Prakash,Chikodi,Chikodi,Brucellosis,1,15,img4001.jpg,2026-06-18,2026-01-01,365
+KA-BGM-4002,Cow,Nitin,Chikodi,Chikodi,FMD Vaccine,1,14,img4002.jpg,2026-06-18,2025-12-31,180
+KA-BGM-4003,Sheep,Arun,Chikodi,Chikodi,PPR Vaccine,1,16,img4003.jpg,2026-06-18,2027-01-01,180

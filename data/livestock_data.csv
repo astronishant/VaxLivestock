@@ -1,0 +1,8 @@
+Animal_ID,Animal_Type,Farmer_Name,Assigned_Village,GPS_Village,Vaccine_Name,Vaccination_Count,Time_Taken_Minute,Proof_Image_Name,Last_Vaccination_Date,Vaccine_Expiry_Date,Vaccination_Interval_Days
+KA-01-9921,Cow,Ramesh G,Hosahalli,Hosahalli,FMD Vaccine,1,15,proof_001.jpg,2026-06-08,2027-04-14,180
+KA-02-4412,Buffalo,Suresh M,Gollarahatti,Gollarahatti,Brucellosis,1,12,proof_002.jpg,2025-11-30,2026-09-26,180
+KA-03-1122,Sheep,Anand K,Tumkur,Doddaballapura,FMD Vaccine,1,20,proof_003.jpg,2026-06-13,2027-06-13,180
+KA-04-5533,Cow,Prakash R,Chikkaballapura,Chikkaballapura,Rabies,15,1,proof_004.jpg,2026-06-16,2027-04-14,365
+KA-05-9988,Cow,Manju N,Tumkur,Tumkur,FMD Vaccine,1,15,proof_001.jpg,2026-06-17,2027-01-04,180
+KA-06-3344,Buffalo,Kumar S,Hosahalli,Hosahalli,Brucellosis,1,10,proof_006.jpg,2026-06-13,2026-05-19,365
+KA-01-7766,Sheep,Raju T,Gollarahatti,Gollarahatti,PPR Vaccine,1,14,proof_007.jpg,2025-12-25,2026-09-26,180

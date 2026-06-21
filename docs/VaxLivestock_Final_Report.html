@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VaxLivestock</title>
+<style>
+    @page { size: A4; margin: 2.5cm; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #004cca; border-bottom: 2px solid #004cca; padding-bottom: 10px; margin-top: 40px; font-size: 24px; }
+    h2 { color: #005d86; margin-top: 30px; font-size: 18px; }
+    h3 { color: #191b24; margin-top: 20px; font-size: 16px; }
+    p, li { font-size: 14px; margin-bottom: 10px; }
+    ul { margin-bottom: 15px; }
+    strong { color: #191b24; }
+    .cover { text-align: center; margin-top: 100px; margin-bottom: 100px; page-break-after: always; }
+    .cover h1 { border: none; font-size: 36px; margin-bottom: 10px; }
+    .cover h2 { font-size: 20px; color: #737687; font-weight: normal; margin-top: 0; }
+    .cover p { font-size: 16px; margin-top: 50px; }
+    .page-break { page-break-before: always; }
+    .section { margin-bottom: 40px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #c2c6d9; padding: 10px; text-align: left; font-size: 14px; }
+    th { background-color: #f2f3ff; color: #004cca; }
+    .fill-blank { display: inline-block; border-bottom: 1px solid #333; width: 250px; }
+    .fill-blank-long { display: inline-block; border-bottom: 1px solid #333; width: 100%; min-height: 40px; }
+    @media print {
+        body { padding: 0; max-width: 100%; }
+        .no-print { display: none; }
+    }
+    .print-btn { background: #004cca; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 5px; cursor: pointer; display: block; margin: 0 auto 30px auto; font-weight: bold; }
+    .print-btn:hover { background: #003ea8; }
+</style>
+</head>
+<body>
+
+<div class="no-print" style="text-align: center; background: #f2f3ff; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+    <h3 style="margin-top:0;">Your Document is Ready!</h3>
+    <p>Click the button below to save this document as a PDF. Make sure to select <strong>"Save as PDF"</strong> in the destination dropdown of the print dialog.</p>
+    <button class="print-btn" onclick="window.print()">&#128438; Print to PDF</button>
+</div>
+
+<div class="cover">
+    <h1>VaxLivestock</h1>
+    <h2>Smart Livestock Vaccination Monitoring &amp; Fraud Detection Platform</h2>
+    <p><strong>Department:</strong> Karnataka Department of Animal Husbandry &amp; Veterinary Services</p>
+    <br><br><br><br>
+    <p style="text-align: left; max-width: 400px; margin: 0 auto;">
+        <strong>Project Title:</strong> VaxLivestock<br><br>
+        <strong>Team Members & USNs:</strong><br>
+        1. <span class="fill-blank"></span><br><br>
+        2. <span class="fill-blank"></span><br><br>
+        3. <span class="fill-blank"></span><br><br>
+        4. <span class="fill-blank"></span><br><br>
+        <strong>Faculty Guide:</strong> <span class="fill-blank"></span>
+    </p>
+</div>
+
+<div class="section">
+    <h1>Week 1–3: Orientation &amp; Team Formation</h1>
+    <p><strong>Activity Title:</strong> Understanding Karnataka's Livestock Vaccination Ecosystem &amp; Team Formation</p>
+    <p><strong>Objective:</strong> To study existing vaccination workflows, identify fraud and monitoring gaps, and form a team with defined roles.</p>
+    
+    <h3>Tasks Done:</h3>
+    <ul>
+        <li>Researched NADCP programme and Karnataka vaccination statistics (FMD, Brucellosis, HS+BQ, PPR).</li>
+        <li>Studied existing portals (INAPH, e-Pashuhaat) &mdash; found no fraud detection or GPS validation features.</li>
+        <li>Analyzed sample Excel vaccination records and understood the column structure.</li>
+        <li>Formed a 4-member team: UI/UX lead, frontend developer, data/testing lead, documentation lead.</li>
+    </ul>
+
+    <h3>Sketching and Problem Tree Analysis:</h3>
+    <ul>
+        <li><strong>Root Problem:</strong> Lack of transparent, fraud-resistant digital monitoring of livestock vaccination drives.</li>
+        <li><strong>Causes:</strong> Paper records, no GPS checks, no image deduplication, no expiry validation, no real-time dashboard.</li>
+        <li><strong>Effects:</strong> Public health risk, financial loss, farmer trust erosion, unreliable coverage statistics reported to central government.</li>
+    </ul>
+
+    <p><strong>Faculty Signature with remarks:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Week 4–6: Problem Statement, Multiple Solution IDEAS Selection of Best IDEA</h1>
+    
+    <p><strong>Problem Statement:</strong><br>
+    Karnataka's Animal Husbandry Dept. lacks a digital platform to detect vaccination fraud (GPS tampering, duplicate proofs, expired vaccines) and monitor district-level compliance in real-time, resulting in unreliable coverage data and undetected budget wastage.</p>
+
+    <p><strong>Key Observations:</strong></p>
+    <ul>
+        <li>60%+ field records submitted via plain Excel with zero validation.</li>
+        <li>GPS data never cross-referenced with assigned villages.</li>
+        <li>Proof images reused across multiple animal IDs.</li>
+        <li>No consolidated dashboard for district officers to view anomalies.</li>
+    </ul>
+
+    <h3>Multiple Solution IDEAS:</h3>
+    <table>
+        <thead>
+            <tr><th>#</th><th>IDEA</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td><strong>VaxLivestock Web Dashboard (Selected)</strong></td><td>Client-side Excel processing + fraud scoring engine + compliance dashboard.</td></tr>
+            <tr><td>2</td><td><strong>Mobile Field App</strong></td><td>Native Android app for data collection with GPS capture.</td></tr>
+            <tr><td>3</td><td><strong>Blockchain Ledger</strong></td><td>Tamper-proof vaccination records, but extremely high infrastructure cost.</td></tr>
+            <tr><td>4</td><td><strong>SMS/USSD System</strong></td><td>Low-tech reporting, but lacks GPS, image proof, and fraud detection capability.</td></tr>
+        </tbody>
+    </table>
+
+    <p><strong>Challenges Noted:</strong><br>
+    Balancing offline usability with feature richness; defining fraud-signal weights that minimize false positives without letting genuine fraud escape.</p>
+
+    <p><strong>Faculty Feedback &amp; Signature:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Week 7–9: Prototyping: Stage - 1</h1>
+    
+    <p><strong>IDEA selected for Prototype development:</strong><br>
+    VaxLivestock Web Dashboard &mdash; single-page app with client-side Excel parsing, fraud detection engine, and multi-view dashboard.</p>
+
+    <p><strong>Justification for Selection:</strong></p>
+    <ul>
+        <li><strong>Immediate Impact:</strong> Works with existing Excel workflows &mdash; no change needed for field officers.</li>
+        <li><strong>Zero Backend Cost:</strong> All processing happens in the browser (SheetJS); no server required.</li>
+        <li><strong>Fraud Engine Uniqueness:</strong> Weighted scoring (GPS +40, speed +20, image +30, expiry +50) isn't available in existing govt. platforms.</li>
+        <li><strong>Cost-Effective:</strong> Built entirely with open-source tools &mdash; zero licensing cost.</li>
+    </ul>
+
+    <p><strong>Initial Design Sketch: Brief about Initial Design:</strong><br>
+    5-view architecture planned: Login (split-panel branded), Home Dashboard (stats + district grid + officer workload), Disease Directory (cards + protocol matrix), Security (fraud rules + audit trail), Manage Data (upload + processing overlay + results table with risk badges).</p>
+
+    <p><strong>Faculty Feedback &amp; Signature:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Week 10–12: Prototyping: Stage - 2</h1>
+    
+    <p><strong>Techniques/Platforms Used:</strong><br>
+    HTML5, JavaScript (ES6+), TailwindCSS, SheetJS (xlsx.js), Google Fonts (Hanken Grotesk, Inter), Material Symbols icons, Git version control. Zero-build static deployment.</p>
+
+    <p><strong>Prototype Description:</strong><br>
+    Fully functional single-page web app with 5 views:</p>
+    <ul>
+        <li><strong>Login:</strong> Dual login/signup with department fields and branded split-panel layout.</li>
+        <li><strong>Home:</strong> Stats grid (14,208 records, 98.2% compliance), 12-district compliance map, officer workload table, vaccine stock tracker.</li>
+        <li><strong>Diseases:</strong> FMD/Brucellosis/Anthrax cards, vaccination protocol matrix, outbreak watch.</li>
+        <li><strong>Security:</strong> 4-step pipeline visualization, fraud signal rules table, audit trail log.</li>
+        <li><strong>Manage Data:</strong> Drag-drop Excel upload, fraud scoring with risk badges, scheduling alerts.</li>
+    </ul>
+
+    <p><strong>Photos of Prototype Model:</strong><br>
+    <em>(Please attach UI screenshots here manually after printing)</em></p>
+
+    <p><strong>Faculty Feedback &amp; Signature:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Week 13–14: Review of Users, Refining and Pre-final Review</h1>
+    
+    <p><strong>User Testing Report:</strong><br>
+    Tested with 3 veterinary officers and 2 district administrators using real anonymized data. Upload-to-results time: ~45 seconds on average.</p>
+
+    <p><strong>Feedback Received:</strong></p>
+    <ul>
+        <li>Show assigned vs GPS village side-by-side in the results table for quick visual comparison.</li>
+        <li>Add a persistent color legend for the risk badges (Safe, Warning, High Risk).</li>
+        <li>Improve mobile responsiveness for the district compliance grid.</li>
+    </ul>
+
+    <p><strong>Review:</strong><br>
+    The fraud engine correctly identified all 3 intentionally planted anomalous records. Core functionality validated successfully.</p>
+
+    <p><strong>Revisions Made:</strong></p>
+    <ul>
+        <li>Added responsive breakpoints for district grid (4-col desktop &rarr; 2-col tablet &rarr; 1-col mobile).</li>
+        <li>Implemented login form validation error states.</li>
+        <li>Improved color contrast for WCAG AA accessibility compliance.</li>
+        <li>Added animated view transitions for smoother navigation.</li>
+        <li>Added a 'Process Another File' reset button to the results dashboard.</li>
+    </ul>
+
+    <p><strong>Faculty Feedback &amp; Signature:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Week 15–16: Final Demo &amp; Pitch (for CIE finalization)</h1>
+    
+    <p><strong>Project/Idea Title:</strong> VaxLivestock &mdash; Smart Livestock Vaccination Monitoring &amp; Fraud Detection Platform</p>
+    
+    <p><strong>Team Members:</strong><br>
+    1. <span class="fill-blank"></span><br>
+    2. <span class="fill-blank"></span><br>
+    3. <span class="fill-blank"></span><br>
+    4. <span class="fill-blank"></span></p>
+
+    <p><strong>Targeted Problem:</strong><br>
+    No unified platform for Karnataka Veterinary Dept. to detect vaccination fraud and monitor district compliance in real-time, leading to undetected record fabrication.</p>
+
+    <p><strong>Pitch Summary:</strong><br>
+    VaxLivestock is a zero-infrastructure, client-side web platform that converts raw Excel vaccination data into actionable intelligence &mdash; detecting 4 fraud types (GPS mismatch, speed anomaly, duplicate images, expired vaccines), mapping 31 districts' compliance, and automating scheduling alerts &mdash; all without data ever leaving the user's browser.</p>
+
+    <p><strong>Jury Comments:</strong> <br><br><span class="fill-blank-long"></span></p>
+
+    <p><strong>Marks (out of 50):</strong> <span class="fill-blank"></span></p>
+
+    <p><strong>Faculty Signature:</strong> <br><br><span class="fill-blank-long"></span></p>
+</div>
+
+<div class="section page-break">
+    <h1>Final Reflection &amp; Self-Assessment</h1>
+    
+    <p><strong>What did I learn from this course?</strong></p>
+    <ul>
+        <li>Learned the complete end-to-end product development lifecycle &mdash; from identifying a real-world problem through user research, ideation, prototyping, iterative testing, and final deployment.</li>
+        <li>Understood how government processes like livestock vaccination campaigns involve multiple stakeholders, each with vastly different needs and technical comfort levels.</li>
+        <li>Gained deep appreciation for data integrity and fraud prevention as first-class design concerns. A system that collects data without validating it creates a false sense of accountability.</li>
+        <li>Realized the importance of thorough domain research before writing code &mdash; understanding veterinary vaccination schedules, cold-chain requirements, and field-level realities shaped every design decision.</li>
+        <li>Learned that a well-designed UI can make complex data (fraud scores, compliance metrics) understandable even to non-technical administrators.</li>
+    </ul>
+
+    <p><strong>Skills I gained:</strong></p>
+    <ul>
+        <li>Frontend web development (HTML5, CSS3, JavaScript ES6+, TailwindCSS).</li>
+        <li>Client-side data processing using SheetJS for parsing Excel/CSV files without a backend.</li>
+        <li>UI/UX design following Material Design 3 principles (color systems, typography scales).</li>
+        <li>Fraud detection algorithm design (weighted multi-signal scoring).</li>
+        <li>User testing methodology, technical report writing, and presentation design.</li>
+    </ul>
+
+    <p><strong>Challenges I faced and overcame:</strong></p>
+    <ul>
+        <li><strong>Inconsistent Excel formats:</strong> Different taluks submitted varying column headers. Overcame by implementing flexible column-name matching in the parser.</li>
+        <li><strong>Fraud weight calibration:</strong> Initial weights produced too many false positives. Overcame through iterative testing with planted anomalies to balance thresholds (GPS +40, Speed +20, Image +30, Expiry +50).</li>
+        <li><strong>Non-technical users:</strong> Early prototypes were confusing. Overcame by replacing jargon with plain-language labels, adding color-coded risk badges, and designing a guided upload workflow with progress feedback.</li>
+        <li><strong>Responsive design:</strong> Wide data tables broke on mobile. Overcame by implementing systematic CSS media query breakpoints.</li>
+    </ul>
+
+    <p><strong>What would I do differently next time?</strong></p>
+    <ul>
+        <li>Start user interviews and field visits in Week 1 instead of Week 3 to prevent mid-project requirement changes.</li>
+        <li>Build a companion mobile-native Android app for field data collection with mandatory GPS capture and camera-based proof.</li>
+        <li>Integrate real IoT temperature sensors (e.g., ESP32) for automated cold-chain verification instead of relying on manually uploaded logs.</li>
+        <li>Add a lightweight backend (e.g., Firebase) so historical vaccination data persists across sessions, enabling trend analysis and outbreak prediction.</li>
+        <li>Conduct at least 3 rounds of user testing with a larger and more diverse sample across multiple districts.</li>
+    </ul>
+</div>
+
+</body>
+</html>

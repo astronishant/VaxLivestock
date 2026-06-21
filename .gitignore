@@ -1,0 +1,17 @@
+# OS / IDE artefacts
+*.log
+*.tmp
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.vscode/
+.DS_Store
+
+# Generated PDFs (they can be regenerated from HTML)
+*.pdf
+
+# Large binaries you may not want versioned (uncomment if needed)
+# *.png
+# *.jpg
+# *.svg

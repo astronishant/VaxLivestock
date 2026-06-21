@@ -1,0 +1,4 @@
+Animal_ID,Animal_Type,Farmer_Name,Assigned_Village,GPS_Village,Vaccine_Name,Vaccination_Count,Time_Taken_Minute,Proof_Image_Name,Last_Vaccination_Date,Vaccine_Expiry_Date,Vaccination_Interval_Days
+KA-BLR-1001,Cow,Ramesh,Dodda,Dodda,FMD Vaccine,1,10,img1001.jpg,2026-06-15,2027-01-01,180
+KA-BLR-1002,Buffalo,Suresh,Dodda,Dodda,Brucellosis,1,15,img1002.jpg,2026-06-16,2027-01-01,365
+KA-BLR-1003,Sheep,Kumar,Dodda,Dodda,PPR Vaccine,1,12,img1003.jpg,2026-06-17,2027-01-01,180

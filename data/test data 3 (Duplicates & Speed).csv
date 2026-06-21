@@ -1,0 +1,4 @@
+Animal_ID,Animal_Type,Farmer_Name,Assigned_Village,GPS_Village,Vaccine_Name,Vaccination_Count,Time_Taken_Minute,Proof_Image_Name,Last_Vaccination_Date,Vaccine_Expiry_Date,Vaccination_Interval_Days
+KA-MYS-3001,Sheep,Anand,Hinkal,Hinkal,PPR Vaccine,20,2,img3001.jpg,2026-06-12,2027-01-01,180
+KA-MYS-3002,Sheep,Anand,Hinkal,Hinkal,PPR Vaccine,1,15,img3001.jpg,2026-06-12,2027-01-01,180
+KA-MYS-3003,Cow,Ravi,Hinkal,Hinkal,FMD Vaccine,1,10,img3001.jpg,2026-06-12,2027-01-01,180

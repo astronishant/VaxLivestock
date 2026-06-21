@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VaxLivestock</title>
+<style>
+    @page { size: A4; margin: 2cm; }
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f9; }
+    
+    /* A4 Page styling for screen and print */
+    .page {
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 2cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+        page-break-after: always;
+    }
+    
+    .page-footer { display: none; }
+.no-number .page-footer { display: none; }
+
+    h1, h2, h3 { color: #004cca; }
+    h1 { border-bottom: 2px solid #004cca; padding-bottom: 10px; font-size: 28px; margin-top: 0; }
+    h2 { font-size: 20px; margin-top: 25px; }
+    p, li { font-size: 15px; margin-bottom: 12px; text-align: justify; }
+    ul { margin-bottom: 20px; }
+    
+    .cover-title { text-align: center; margin-top: 6cm; }
+    .cover-title h1 { border: none; font-size: 42px; margin-bottom: 10px; }
+    .cover-title h2 { font-size: 22px; color: #555; font-weight: normal; margin-top: 0; }
+    
+    table.index-table { width: 80%; margin: 2cm auto; border-collapse: collapse; }
+    table.index-table th, table.index-table td { padding: 12px; font-size: 16px; border-bottom: 1px solid #ddd; }
+    table.index-table th { text-align: left; background: #f2f3ff; color: #004cca; }
+    table.index-table td.page-num { text-align: right; font-weight: bold; }
+
+    table.data-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
+    table.data-table th, table.data-table td { border: 1px solid #c2c6d9; padding: 10px; text-align: left; font-size: 14px; }
+    table.data-table th { background-color: #f2f3ff; color: #004cca; }
+
+    @media print {
+    body { margin: 0; background-color: white; }
+    .page { margin: 0; border: none; box-shadow: none; width: 100%; min-height: 100%; padding: 0; }
+    .no-print { display: none !important; }
+    .page-footer { display: none !important; }
+}
+
+    .print-btn { background: #004cca; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 5px; cursor: pointer; display: block; margin: 20px auto; font-weight: bold; }
+    .print-btn:hover { background: #003ea8; }
+</style>
+</head>
+<body>
+
+<div class="no-print" style="text-align: center; background: #fff; padding: 20px; border-bottom: 1px solid #ddd;">
+    <p>Click the button below to save this document as a PDF. Make sure to select <strong>"Save as PDF"</strong> in the print dialog. Ensure "Headers and footers" is <strong>unchecked</strong> in the print dialog so the browser doesn't add its own page numbers over ours.</p>
+    <button class="print-btn" onclick="window.print()">&#128438; Print to PDF</button>
+</div>
+
+<!-- PAGE: COVER -->
+<div class="page no-number">
+    <div class="cover-title">
+        <h1>VaxLivestock</h1>
+        <h2>Smart Livestock Vaccination Monitoring &amp; Fraud Detection Platform</h2>
+        <br><br><br>
+        <p style="font-size: 18px; color: #444;"><strong>Project Report</strong></p>
+        <br><br><br>
+        <p style="text-align: left; width: 50%; margin: 0 auto; font-size: 16px;">
+            <strong>Department:</strong> Karnataka Department of Animal Husbandry<br><br>
+            <strong>Team Members:</strong><br>
+            1. ______________________<br>
+            2. ______________________<br>
+            3. ______________________<br>
+            4. ______________________<br><br>
+            <strong>Faculty Guide:</strong> ______________________
+        </p>
+    </div>
+</div>
+
+<!-- PAGE: INDEX -->
+<div class="page no-number">
+    <h1 style="text-align: center; border: none; margin-top: 2cm;">Table of Contents</h1>
+    <table class="index-table">
+        <thead>
+            <tr>
+                 <th>Section</th>
+            </tr>
+        </thead>
+        <tbody>
+             <tr><td>1. Introduction &amp; Problem Statement</td></tr>
+             <tr><td>2. Methodology</td></tr>
+             <tr><td>3. Technology Stack</td></tr>
+             <tr><td>4. Applications</td></tr>
+             <tr><td>5. Advantages &amp; Disadvantages</td></tr>
+             <tr><td>6. Conclusion &amp; Future Scope</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PAGE 1: INTRODUCTION & PROBLEM STATEMENT -->
+<div class="page">
+    <h1>1. Introduction &amp; Problem Statement</h1>
+    
+    <h2>1.1 Introduction</h2>
+    <p>Livestock vaccination remains a critical pillar of animal health management across India. With the world's largest livestock population, diseases such as Foot-and-Mouth Disease (FMD), Brucellosis, Haemorrhagic Septicaemia (HS), and Black Quarter (BQ) cause substantial annual economic losses. While the government runs extensive vaccination campaigns, the monitoring and verification of these field-level activities remain fragmented.</p>
+    <p>VaxLivestock is a digital platform designed to bring transparency and accountability to these campaigns. By acting as an intelligent oversight tool, it empowers veterinary departments to monitor field activities, detect fraudulent records, and ensure that livestock receive genuine, unexpired vaccines.</p>
+
+    <h2>1.2 Problem Statement</h2>
+    <p>The Karnataka Department of Animal Husbandry lacks a unified, intelligent digital platform to monitor field-level livestock vaccination data in real-time. Currently, field records are heavily paper-based or maintained in unstructured Excel sheets. This leads to severe systemic challenges:</p>
+    <ul>
+        <li><strong>Ghost Vaccinations:</strong> Field records can be fabricated entirely without any field visits.</li>
+        <li><strong>Location Tampering:</strong> Without GPS cross-referencing, there is no proof that an officer visited their assigned village.</li>
+        <li><strong>Duplicate Proofs:</strong> The same proof image is often copy-pasted across multiple animal records to inflate vaccination numbers artificially.</li>
+        <li><strong>Expired Vaccines:</strong> Vials past their expiry date may be administered unnoticed, providing zero immunity to the livestock.</li>
+        <li><strong>Lack of Visibility:</strong> District officers have no real-time dashboard to monitor compliance or workload, delaying critical corrective actions during outbreaks.</li>
+    </ul>
+    <div class="page-footer">Page 1</div>
+</div>
+
+<!-- PAGE 2: METHODOLOGY -->
+<div class="page">
+    <h1>2. Methodology</h1>
+    
+    <h2>2.1 System Architecture</h2>
+    <p>VaxLivestock operates on a zero-infrastructure, client-side processing architecture. Instead of relying on a centralized server to parse and analyze large datasets, the platform utilizes the user's browser to read Excel/CSV files locally. This ensures absolute data privacy and enables the tool to function even in environments with intermittent internet connectivity once the initial page has loaded.</p>
+
+    <h2>2.2 Fraud Detection Engine</h2>
+    <p>The core methodology revolves around a weighted, multi-signal fraud scoring algorithm. When an administrator uploads a vaccination spreadsheet, the system parses the rows and assigns a risk score based on the following rules:</p>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Anomaly Detected</th>
+                <th>Logic / Trigger Condition</th>
+                <th>Weight / Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GPS Mismatch</strong></td>
+                <td>The assigned target village does not match the actual GPS location captured during the vaccination.</td>
+                <td><strong>+40 Points</strong><br>(Requires Officer Review)</td>
+            </tr>
+            <tr>
+                <td><strong>Impossible Speed</strong></td>
+                <td>The number of vaccines administered divided by the time taken exceeds humanly possible limits (e.g., 20 cows in 2 mins).</td>
+                <td><strong>+20 Points</strong><br>(Flagged in Audit Trail)</td>
+            </tr>
+            <tr>
+                <td><strong>Duplicate Image</strong></td>
+                <td>The exact same proof image filename is submitted for multiple distinct animal records.</td>
+                <td><strong>+30 Points</strong><br>(Record Flagged)</td>
+            </tr>
+            <tr>
+                <td><strong>Expired Vaccine</strong></td>
+                <td>The recorded vaccination date occurs after the official expiry date of the vaccine vial used.</td>
+                <td><strong>+50 Points</strong><br>(Immediate Escalation)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2.3 Risk Categorization</h2>
+    <p>Based on the cumulative fraud score, records are categorized visually on the dashboard:</p>
+    <ul>
+        <li><strong>Safe (Green):</strong> Score of 0. Record is clean and verified.</li>
+        <li><strong>Warning (Amber):</strong> Score between 1 and 39. Requires secondary checks.</li>
+        <li><strong>High Risk (Red):</strong> Score of 40 or above. Record is severely compromised and escalated.</li>
+    </ul>
+    <div class="page-footer">Page 2</div>
+</div>
+
+<!-- PAGE 3: TECHNOLOGY STACK -->
+<div class="page">
+    <h1>3. Technology Stack</h1>
+    
+    <h2>3.1 Frontend Development</h2>
+    <p>The application is built as a highly responsive Single Page Application (SPA). It utilizes standard web technologies tailored for speed and compatibility:</p>
+    <ul>
+        <li><strong>HTML5 &amp; CSS3:</strong> Forms the structural foundation and standard styling.</li>
+        <li><strong>JavaScript (ES6+):</strong> Handles DOM manipulation, view routing, state management, and algorithmic fraud detection entirely on the client side.</li>
+    </ul>
+
+    <h2>3.2 UI/UX and Styling</h2>
+    <p>To provide a professional, government-grade aesthetic, the platform leverages modern styling frameworks:</p>
+    <ul>
+        <li><strong>TailwindCSS:</strong> A utility-first CSS framework used for rapid UI development and ensuring responsive layouts across desktop, tablet, and mobile devices.</li>
+        <li><strong>Material Design 3:</strong> Custom color tokens (primary blue, secondary containers, error reds) were implemented to match standard enterprise and government accessibility guidelines.</li>
+        <li><strong>Typography &amp; Icons:</strong> Utilizes Google Fonts (Hanken Grotesk, Inter, JetBrains Mono) and Google Material Symbols for intuitive visual communication.</li>
+    </ul>
+
+    <h2>3.3 Data Processing Engine</h2>
+    <p><strong>SheetJS (xlsx.js):</strong> A powerful open-source library integrated into the platform to read, parse, and manipulate Excel (XLSX, XLS) and CSV files directly within the web browser. This eliminates the need for Python/Pandas backend processing, reducing latency and infrastructure costs to zero.</p>
+    <div class="page-footer">Page 3</div>
+</div>
+
+<!-- PAGE 4: APPLICATIONS -->
+<div class="page">
+    <h1>4. Applications</h1>
+    
+    <p>The VaxLivestock platform is designed to serve multiple levels within the veterinary and agricultural administration hierarchy. Its primary applications include:</p>
+
+    <h2>4.1 District Veterinary Administration</h2>
+    <p>District-level officers can use the platform as a centralized command center. By looking at the District Compliance Map, they can instantly identify which taluks or villages are lagging behind in their vaccination drives and reallocate resources accordingly without waiting for end-of-month manual reports.</p>
+
+    <h2>4.2 State Audit &amp; Compliance Cell</h2>
+    <p>State auditors can use the platform's fraud detection engine to automatically vet thousands of field records in seconds. Instead of manually cross-checking images and GPS coordinates, auditors receive a pre-filtered list of "High Risk" entries, drastically reducing administrative overhead and eliminating manual error.</p>
+
+    <h2>4.3 Field Officer Scheduling</h2>
+    <p>The system calculates vaccination intervals based on the last vaccination date and the specific disease protocol (e.g., FMD every 6 months). It automatically categorizes livestock into "Due This Week" or "Overdue," providing actionable target lists for field officers to follow up on, ensuring no animal falls out of the immunization net.</p>
+
+    <h2>4.4 Supply Chain &amp; Cold-Chain Monitoring</h2>
+    <p>By tracking vaccine vial usage and cross-referencing expiry dates, the platform acts as a secondary check on the supply chain. It prevents the administration of expired biologicals and provides insights into vaccine consumption rates, aiding in better procurement forecasting.</p>
+    
+    <div class="page-footer">Page 4</div>
+</div>
+
+<!-- PAGE 5: ADVANTAGES & DISADVANTAGES -->
+<div class="page">
+    <h1>5. Advantages &amp; Disadvantages</h1>
+    
+    <h2>5.1 Advantages</h2>
+    <ul>
+        <li><strong>Instant Anomaly Detection:</strong> The multi-signal fraud engine catches fabricated records, duplicate images, and GPS mismatches in seconds, a task that is nearly impossible to do manually at scale.</li>
+        <li><strong>Absolute Data Privacy:</strong> Because data is processed entirely on the client side (in the browser), sensitive farmer data and government records are never transmitted to external servers.</li>
+        <li><strong>Zero Infrastructure Cost:</strong> The absence of a backend database or server means there are zero hosting costs, API limits, or server maintenance overheads. The application can run purely as a static HTML file.</li>
+        <li><strong>Offline Capability:</strong> Once the web application is loaded in the browser, it can process Excel files and generate fraud reports even if the internet connection drops, making it highly suitable for rural deployment.</li>
+        <li><strong>Intuitive Visualization:</strong> Converts complex spreadsheet data into easy-to-read color-coded badges, progress bars, and compliance grids that non-technical administrators can understand immediately.</li>
+    </ul>
+
+    <h2>5.2 Disadvantages</h2>
+    <ul>
+        <li><strong>No Historical Persistence:</strong> Because there is no backend database, historical data is not saved across browsing sessions. Trend analysis across multiple years is not currently possible unless the user manually combines historical Excel sheets.</li>
+        <li><strong>Reliance on Manual Uploads:</strong> The system requires an administrator or data entry operator to manually drag and drop Excel files. It does not automatically sync data directly from the field via an API.</li>
+        <li><strong>Vulnerability to Clean Data Falsification:</strong> If a field officer is highly sophisticated and falsifies the Excel sheet with perfectly valid, unique GPS coordinates and unique images, the system may register the data as "Safe."</li>
+    </ul>
+    
+    <div class="page-footer">Page 5</div>
+</div>
+
+<!-- PAGE 6: CONCLUSION & FUTURE SCOPE -->
+<div class="page">
+    <h1>6. Conclusion &amp; Future Scope</h1>
+    
+    <h2>6.1 Conclusion</h2>
+    <p>The VaxLivestock platform successfully addresses a critical gap in the monitoring of large-scale government livestock vaccination campaigns. By shifting from unstructured, unverified paper/Excel records to a smart, automated fraud-detection dashboard, the platform restores accountability to field operations.</p>
+    <p>The implementation of a weighted multi-signal scoring engine ensures that common malpractice—such as GPS tampering, impossible vaccination speeds, and the use of expired vials—is caught instantly. Ultimately, VaxLivestock serves as a robust, cost-effective, and highly scalable tool that safeguards public health and optimizes government expenditure in the veterinary sector.</p>
+
+    <h2>6.2 Future Scope</h2>
+    <p>While the current iteration of the platform is highly functional as an analytical dashboard, future enhancements could evolve it into a comprehensive ecosystem:</p>
+    <ul>
+        <li><strong>Companion Mobile Application:</strong> Developing a dedicated Android app for field officers that enforces real-time GPS tagging and live camera captures (preventing gallery uploads), directly feeding verified data into the system.</li>
+        <li><strong>IoT Cold-Chain Integration:</strong> Integrating Bluetooth or WiFi-enabled temperature loggers (e.g., ESP32 sensors) placed inside vaccine carriers to automatically stream temperature data, immediately flagging any vials that fall outside the required 2–8°C range.</li>
+        <li><strong>Backend Cloud Integration:</strong> Adding a lightweight, secure backend (such as Firebase or PostgreSQL) to persist historical data. This would enable the application of Machine Learning models to predict seasonal disease outbreaks based on historical trends.</li>
+        <li><strong>Automated SMS Alerts:</strong> Integrating an SMS/WhatsApp gateway to automatically alert district veterinary officers the moment a "High Risk" batch of records is detected.</li>
+    </ul>
+
+    <div class="page-footer">Page 6</div>
+</div>
+
+</body>
+</html>

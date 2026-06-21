@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaxLivestock | Karnataka Veterinary Dept.</title>
+    <meta name="description" content="Smart Livestock Vaccination Monitoring & Fraud Detection for the Karnataka Department of Animal Husbandry.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary":"#ffffff","on-primary-container":"#f3f3ff","on-error-container":"#93000a",
+              "on-background":"#191b24","inverse-on-surface":"#eff0fd","tertiary-container":"#0077aa",
+              "surface-variant":"#e1e2ee","on-error":"#ffffff","primary-fixed-dim":"#b4c5ff",
+              "on-tertiary-fixed-variant":"#004c6e","secondary-fixed-dim":"#b7c8e1",
+              "tertiary-fixed-dim":"#89ceff","error-container":"#ffdad6",
+              "surface-container-highest":"#e1e2ee","secondary-container":"#d0e1fb",
+              "secondary":"#505f76","primary":"#004cca","outline-variant":"#c2c6d9",
+              "on-primary":"#ffffff","inverse-primary":"#b4c5ff","surface-container-lowest":"#ffffff",
+              "on-surface":"#191b24","on-secondary-fixed":"#0b1c30","on-tertiary-fixed":"#001e2f",
+              "on-secondary-container":"#54647a","surface-dim":"#d8d9e6",
+              "on-secondary-fixed-variant":"#38485d","primary-container":"#0062ff",
+              "surface-tint":"#0053da","surface":"#faf8ff","on-secondary":"#ffffff",
+              "on-primary-fixed-variant":"#003ea8","inverse-surface":"#2e303a",
+              "error":"#ba1a1a","surface-container":"#ecedfa","on-surface-variant":"#424656",
+              "surface-container-low":"#f2f3ff","tertiary-fixed":"#c9e6ff","outline":"#737687",
+              "surface-bright":"#faf8ff","background":"#faf8ff","secondary-fixed":"#d3e4fe",
+              "surface-container-high":"#e7e7f4","on-tertiary-container":"#edf5ff",
+              "primary-fixed":"#dbe1ff","tertiary":"#005d86","on-primary-fixed":"#00174b"
+            },
+            borderRadius: { DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" },
+            fontFamily: {
+              "label-md":["JetBrains Mono","monospace"],
+              "headline-lg-mobile":["Hanken Grotesk","sans-serif"],
+              "body-lg":["Inter","sans-serif"],
+              "label-sm":["Inter","sans-serif"],
+              "headline-lg":["Hanken Grotesk","sans-serif"],
+              "body-md":["Inter","sans-serif"],
+              "headline-md":["Hanken Grotesk","sans-serif"]
+            },
+            fontSize: {
+              "label-md":["14px",{lineHeight:"20px",letterSpacing:"0.05em",fontWeight:"500"}],
+              "headline-lg-mobile":["32px",{lineHeight:"40px",fontWeight:"700"}],
+              "body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],
+              "label-sm":["12px",{lineHeight:"16px",fontWeight:"600"}],
+              "headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"700"}],
+              "body-md":["16px",{lineHeight:"24px",fontWeight:"400"}],
+              "headline-md":["24px",{lineHeight:"32px",fontWeight:"600"}]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* View Engine */
+        .view-container { display: none; flex: 1; flex-direction: column; width: 100%; animation: fadeIn 0.3s ease; }
+        .view-container.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Hero Background */
+        .hero-bg {
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, rgba(242, 246, 255, 0.98) 0%, rgba(242, 246, 255, 0.92) 46%, rgba(242, 246, 255, 0.5) 100%),
+                linear-gradient(180deg, #eef6ff 0%, #f5f7ff 100%);
+        }
+        .hero-bg::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(48vw, 680px);
+            background:
+                linear-gradient(90deg, rgba(242, 246, 255, 0.98) 0%, rgba(242, 246, 255, 0.58) 32%, rgba(242, 246, 255, 0.04) 74%),
+                linear-gradient(180deg, rgba(242, 246, 255, 0.04), rgba(242, 246, 255, 0.58)),
+                url('https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?auto=format&fit=crop&w=1100&q=80');
+            background-size: cover;
+            background-position: center right;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+        @media (max-width: 1024px) {
+            .hero-bg::after {
+                width: 100%;
+                opacity: 0.18;
+            }
+        }
+
+        /* Nav active state */
+        .nav-link-active { color: #004cca !important; border-bottom: 2px solid #004cca; padding-bottom: 2px; font-weight: 700 !important; }
+
+        /* ===== Manage Data Tab Styles (needed by JS) ===== */
+        .upload-zone {
+            background: #faf8ff; border: 2px dashed #c2c6d9; border-radius: 12px;
+            padding: 80px 20px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 40px;
+        }
+        .upload-zone:hover, .upload-zone.dragover { background: #f2f3ff; border-color: #004cca; }
+        .upload-zone svg { width: 64px; height: 64px; fill: #004cca; margin-bottom: 24px; opacity: 0.9; }
+        #file-input { display: none; }
+
+        .processing-overlay {
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            background: #faf8ff; border: 1px solid #c2c6d9; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 80px 40px; text-align: center; margin-bottom: 40px;
+        }
+        .processing-overlay.active { display: flex; }
+        .spinner {
+            width: 56px; height: 56px; border: 4px solid #c2c6d9;
+            border-top-color: #004cca; border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin-bottom: 32px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .processing-overlay h3 { font-size: 22px; font-weight: 600; margin-bottom: 16px; color: #191b24; }
+        .processing-overlay .progress-track {
+            width: 320px; max-width: 100%; height: 6px; background: #e1e2ee;
+            border-radius: 3px; overflow: hidden; margin-bottom: 32px;
+        }
+        .processing-overlay .progress-fill {
+            height: 100%; width: 0%; background: #004cca; border-radius: 3px; transition: width 0.25s linear;
+        }
+        .fact-text { font-size: 15px; color: #424656; line-height: 1.6; max-width: 540px; min-height: 48px; }
+
+        .dashboard-results { display: none; gap: 32px; flex-direction: column; }
+        .data-panel { background: #faf8ff; border: 1px solid #c2c6d9; border-radius: 12px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); overflow: hidden; }
+        .panel-header {
+            padding: 20px 24px; border-bottom: 1px solid #c2c6d9;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .panel-header h3 { font-size: 18px; font-weight: 600; color: #191b24; }
+        .table-responsive { overflow-x: auto; max-height: 500px; }
+        #view-tool table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+        #view-tool th, #view-tool td { padding: 16px 24px; border-bottom: 1px solid #c2c6d9; font-size: 14px; }
+        #view-tool th {
+            font-weight: 600; color: #424656; position: sticky; top: 0;
+            background: #f2f3ff; box-shadow: 0 1px 0 #c2c6d9; z-index: 10;
+            text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em;
+        }
+        #view-tool tr:hover td { background: #f2f3ff; }
+        .badge { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block; letter-spacing: 0.02em; }
+        .badge.high-risk, .badge.overdue { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+        .badge.warning, .badge.due-week  { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+        .badge.safe, .badge.upcoming     { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; }
+        .btn-tool {
+            background: transparent; color: #191b24; border: 1px solid #c2c6d9; box-shadow: none;
+            font-weight: 500; padding: 10px 20px; font-size: 0.875rem; border-radius: 6px; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-tool:hover { background: #f2f3ff; }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; }
+        .mini-progress { height: 8px; border-radius: 9999px; background: #e1e2ee; overflow: hidden; }
+        .mini-progress span { display: block; height: 100%; border-radius: inherit; }
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .district-cell {
+            min-height: 72px;
+            border: 1px solid #c2c6d9;
+            border-radius: 8px;
+            padding: 10px;
+            background: #ffffff;
+        }
+        .district-cell strong { display: block; color: #191b24; font-size: 13px; }
+        .district-cell span { display: block; margin-top: 4px; color: #424656; font-size: 12px; }
+        .district-cell.safe { border-color: #a7f3d0; background: #ecfdf5; }
+        .district-cell.watch { border-color: #fde68a; background: #fffbeb; }
+        .district-cell.risk { border-color: #fecaca; background: #fef2f2; }
+        .ops-table { width: 100%; border-collapse: collapse; }
+        .ops-table th, .ops-table td { padding: 12px 14px; border-bottom: 1px solid #e1e2ee; text-align: left; font-size: 13px; }
+        .ops-table th { color: #424656; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: #f2f3ff; }
+        .ops-table td { color: #191b24; }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 9999px; font-size: 12px; font-weight: 700; }
+        .chip.blue { background: #dbe1ff; color: #003ea8; }
+        .chip.green { background: #ecfdf5; color: #047857; }
+        .chip.amber { background: #fffbeb; color: #b45309; }
+        .chip.red { background: #fef2f2; color: #b91c1c; }
+        @media (max-width: 720px) {
+            .district-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .ops-table th, .ops-table td { padding: 10px; }
+        }
+
+        /* Login screen */
+        .login-screen {
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 18px;
+            background:
+                radial-gradient(circle at top left, rgba(0, 119, 170, 0.16), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(0, 76, 202, 0.18), transparent 36%),
+                linear-gradient(135deg, #f8fbff 0%, #eef4ff 48%, #f7fbf6 100%);
+        }
+        .login-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+            width: min(1080px, 100%);
+            min-height: 640px;
+            overflow: hidden;
+            border: 1px solid rgba(115, 118, 135, 0.22);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.78);
+            box-shadow: 0 24px 80px rgba(0, 43, 112, 0.16);
+            backdrop-filter: blur(18px);
+        }
+        .login-brand-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 42px;
+            overflow: hidden;
+            color: #ffffff;
+            background:
+                linear-gradient(135deg, rgba(0, 76, 202, 0.94), rgba(0, 93, 134, 0.9)),
+                url('https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1200&q=80');
+            background-position: center;
+            background-size: cover;
+        }
+        .login-brand-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 23, 75, 0.18), rgba(0, 23, 75, 0.72));
+        }
+        .login-brand-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+        .login-logo-lockup {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 8px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+        }
+        .login-logo.small {
+            width: 64px;
+            height: 64px;
+            border: 1px solid #e1e2ee;
+            box-shadow: 0 12px 28px rgba(0, 76, 202, 0.14);
+        }
+        .login-panel-logo {
+            width: min(220px, 48vw);
+            height: min(220px, 48vw);
+            margin: 28px auto 0;
+            padding: 22px;
+            object-fit: contain;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.28);
+        }
+        .login-brand-title {
+            margin: 0;
+            font-family: "Hanken Grotesk", sans-serif;
+            font-size: 22px;
+            line-height: 1.1;
+            font-weight: 700;
+        }
+        .login-brand-subtitle {
+            margin: 4px 0 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .login-hero-copy {
+            max-width: 460px;
+            margin-top: 80px;
+        }
+        .login-hero-copy h1 {
+            margin: 0 0 18px;
+            font-family: "Hanken Grotesk", sans-serif;
+            font-size: clamp(36px, 5vw, 58px);
+            line-height: 0.98;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+        .login-hero-copy p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .login-metric-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 36px;
+        }
+        .login-metric {
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 10px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.13);
+        }
+        .login-metric strong {
+            display: block;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+        .login-metric span {
+            display: block;
+            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+        .login-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 42px;
+            background: rgba(255, 255, 255, 0.9);
+            overflow-y: auto;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border: 1px solid #e1e7f5;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 18px 46px rgba(31, 45, 79, 0.12);
+        }
+        .login-card-header {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .login-card-kicker {
+            margin: 18px 0 0;
+            color: #2f6f4e;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .login-card-header h2 {
+            margin: 8px 0 8px;
+            color: #191b24;
+            font-family: "Hanken Grotesk", sans-serif;
+            font-size: 34px;
+            line-height: 1.12;
+            font-weight: 700;
+        }
+        .login-card-header p {
+            margin: 0;
+            color: #424656;
+            font-size: 15px;
+            line-height: 1.55;
+        }
+        .auth-form {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.24s ease, transform 0.24s ease;
+        }
+        .auth-form.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: authFormIn 0.24s ease both;
+        }
+        @keyframes authFormIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .auth-message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .auth-message.active {
+            display: block;
+        }
+        .auth-message.success {
+            border: 1px solid #9bd4ad;
+            background: #f0fbf3;
+            color: #166534;
+        }
+        .auth-message.error {
+            border: 1px solid #f3b4b4;
+            background: #fff1f1;
+            color: #b91c1c;
+        }
+        .auth-switch {
+            margin: 18px 0 0;
+            color: #424656;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .auth-link {
+            border: none;
+            background: transparent;
+            color: #004cca;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0;
+        }
+        .auth-link:hover {
+            color: #003ea8;
+            text-decoration: underline;
+        }
+        .login-field {
+            margin-bottom: 14px;
+        }
+        .login-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #424656;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .login-field input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #c2c6d9;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #191b24;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .login-field input:focus {
+            border-color: #004cca;
+            box-shadow: 0 0 0 4px rgba(0, 76, 202, 0.12);
+        }
+        .login-field input[aria-invalid="true"] {
+            border-color: #dc2626;
+            background: #fffafa;
+        }
+        .login-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 4px;
+            padding: 13px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #004cca;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 16px 30px rgba(0, 76, 202, 0.24);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .login-button:hover {
+            background: #003ea8;
+            box-shadow: 0 20px 34px rgba(0, 76, 202, 0.28);
+            transform: translateY(-1px);
+        }
+        .login-footnote {
+            margin-top: 22px;
+            color: #737687;
+            font-size: 12px;
+            line-height: 1.55;
+            text-align: center;
+        }
+        @media (max-width: 860px) {
+            .login-layout {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+            .login-brand-panel {
+                min-height: 360px;
+                padding: 30px;
+            }
+            .login-hero-copy {
+                margin-top: 54px;
+            }
+            .login-form-panel {
+                padding: 32px 24px;
+            }
+        }
+        @media (max-width: 540px) {
+            .login-screen {
+                padding: 16px;
+            }
+            .login-layout {
+                border-radius: 18px;
+            }
+            .login-brand-panel {
+                min-height: 310px;
+                padding: 24px;
+            }
+            .login-logo {
+                width: 58px;
+                height: 58px;
+            }
+            .login-logo.small {
+                width: 56px;
+                height: 56px;
+            }
+            .login-panel-logo {
+                width: 154px;
+                height: 154px;
+                padding: 16px;
+            }
+            .login-brand-title {
+                font-size: 19px;
+            }
+            .login-hero-copy h1 {
+                font-size: 34px;
+            }
+            .login-metric-strip {
+                grid-template-columns: 1fr;
+            }
+            .login-card-header h2 {
+                font-size: 29px;
+            }
+            .login-card {
+                padding: 24px 18px;
+                border-radius: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased" style="font-family: 'Inter', sans-serif;">
+
+<!-- ======================== VIEW A : LOGIN ======================== -->
+<div id="view-login" class="view-container active login-screen">
+    <div class="login-layout">
+        <section class="login-brand-panel" aria-label="VaxLivestock platform overview">
+            <div class="login-logo-lockup">
+                <div>
+                    <p class="login-brand-title">VaxLivestock</p>
+                    <p class="login-brand-subtitle">Karnataka Veterinary Services</p>
+                </div>
+            </div>
+            <img src="logo.png" alt="VaxLivestock logo" class="login-panel-logo">
+            <div class="login-hero-copy">
+                <h1>Secure livestock vaccination monitoring</h1>
+                <p>Track field records, detect suspicious entries, and keep vaccination schedules visible for every district team.</p>
+                <div class="login-metric-strip" aria-label="Platform highlights">
+                    <div class="login-metric"><strong>98.2%</strong><span>Compliance visibility</span></div>
+                    <div class="login-metric"><strong>24/7</strong><span>Client-side access</span></div>
+                    <div class="login-metric"><strong>GPS</strong><span>Field validation</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="login-form-panel" aria-label="Authentication form">
+            <div class="login-card">
+                <div id="auth-message" class="auth-message" role="status" aria-live="polite"></div>
+
+                <form id="login-form" class="auth-form active" novalidate>
+                    <div class="login-card-header">
+                        <p class="login-card-kicker">Department Login</p>
+                        <h2>Welcome back</h2>
+                        <p>Sign in to review vaccination data, fraud alerts, and district-level field activity.</p>
+                    </div>
+                    <div class="login-field">
+                        <label for="login-email">Official email address</label>
+                        <input type="email" placeholder="name@department.gov.in" id="login-email" autocomplete="email" required>
+                    </div>
+                    <div class="login-field">
+                        <label for="login-pwd">Password</label>
+                        <input type="password" placeholder="Optional" id="login-pwd" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="login-button">
+                        Sign In
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                    <p class="auth-switch">Don't have an account? <button type="button" class="auth-link" data-auth-mode="signup">Create one</button></p>
+                    <p class="login-footnote">Authorized access for department data review and field monitoring.</p>
+                </form>
+
+                <form id="signup-form" class="auth-form" novalidate>
+                    <div class="login-card-header">
+                        <p class="login-card-kicker">Department Sign Up</p>
+                        <h2>Create account</h2>
+                        <p>Register a department account for secure vaccination monitoring access.</p>
+                    </div>
+                    <div class="login-field">
+                        <label for="signup-department">Department name</label>
+                        <input type="text" placeholder="Animal Husbandry Department" id="signup-department" autocomplete="organization" required>
+                    </div>
+                    <div class="login-field">
+                        <label for="signup-district">District name</label>
+                        <input type="text" placeholder="Bengaluru Urban" id="signup-district" autocomplete="address-level2" required>
+                    </div>
+                    <div class="login-field">
+                        <label for="signup-email">Official email address</label>
+                        <input type="email" placeholder="name@department.gov.in" id="signup-email" autocomplete="email" required>
+                    </div>
+                    <div class="login-field">
+                        <label for="signup-pwd">Password</label>
+                        <input type="password" placeholder="Optional" id="signup-pwd" autocomplete="new-password">
+                    </div>
+                    <div class="login-field">
+                        <label for="signup-confirm-pwd">Confirm password</label>
+                        <input type="password" placeholder="Optional" id="signup-confirm-pwd" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="login-button">
+                        Create Account
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                    <p class="auth-switch">Already have an account? <button type="button" class="auth-link" data-auth-mode="login">Sign in</button></p>
+                    <p class="login-footnote">Passwords are submitted only to the configured authentication service.</p>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<!-- ======================== APP SHELL ======================== -->
+<div id="app-shell" style="display:none; flex-direction:column; min-height:100vh;">
+
+    <!-- ===== NAVBAR ===== -->
+    <header class="bg-surface shadow-sm sticky top-0 z-50 w-full border-b border-outline-variant">
+        <div class="flex justify-between items-center px-4 sm:px-8 w-full max-w-[1280px] mx-auto h-16 sm:h-20">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.navigateTo('home')">
+                <span class="material-symbols-outlined filled text-primary text-3xl">vaccines</span>
+                <span class="font-headline-md text-headline-md font-bold text-primary">VaxLivestock</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="#" onclick="window.navigateTo('home'); return false;" id="nav-home" class="nav-item nav-link-active text-label-md px-2 py-1 transition-colors">Home</a>
+                <a href="#" onclick="window.navigateTo('diseases'); return false;" id="nav-diseases" class="nav-item text-on-surface-variant hover:text-primary text-label-md px-2 py-1 transition-colors">Diseases</a>
+                <a href="#" onclick="window.navigateTo('security'); return false;" id="nav-security" class="nav-item text-on-surface-variant hover:text-primary text-label-md px-2 py-1 transition-colors">Security</a>
+                <a href="#" onclick="window.navigateTo('news'); return false;" id="nav-news" class="nav-item text-on-surface-variant hover:text-primary text-label-md px-2 py-1 transition-colors">News</a>
+                <a href="#" onclick="window.navigateTo('tool'); return false;" id="nav-tool" class="nav-item text-on-surface-variant hover:text-primary text-label-md px-2 py-1 transition-colors">Manage Data</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="window.performLogout()" class="bg-primary-container text-on-primary-container font-label-md text-label-md px-4 sm:px-6 py-2 rounded-lg hover:bg-primary-fixed transition-all shadow-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== VIEW: HOME ==================== -->
+    <div id="view-home" class="view-container active">
+        <!-- Hero Section -->
+        <section class="hero-bg py-20 lg:py-32 relative px-4 sm:px-6 lg:px-8 border-b border-outline-variant">
+            <div class="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row items-center gap-12">
+                <div class="flex-1 text-center lg:text-left">
+                    <h1 class="text-headline-lg-mobile lg:text-headline-lg text-on-surface mb-6">Govt. of Karnataka Veterinary Dept.</h1>
+                    <p class="text-body-lg text-on-surface-variant mb-12 max-w-2xl mx-auto lg:mx-0">
+                        Ensuring transparency, combating fraud, and securing the health of rural livestock through automated, intelligent monitoring systems.
+                    </p>
+                    <!-- Statistics Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto lg:mx-0">
+                        <div class="bg-surface p-6 rounded-xl shadow-sm border border-outline-variant flex flex-col items-start gap-2">
+                            <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0 mb-2">
+                                <svg class="w-5 h-5 text-on-primary-container" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                            </div>
+                            <p class="text-headline-md text-on-surface">14,208</p>
+                            <p class="text-label-sm text-on-surface-variant">Records Verified Today</p>
+                        </div>
+                        <div class="bg-surface p-6 rounded-xl shadow-sm border border-outline-variant flex flex-col items-start gap-2">
+                            <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0 mb-2">
+                                <svg class="w-5 h-5 text-on-secondary-container" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                            </div>
+                            <p class="text-headline-md text-on-surface">98.2%</p>
+                            <p class="text-label-sm text-on-surface-variant">Compliance Rate</p>
+                        </div>
+                        <div class="bg-surface p-6 rounded-xl shadow-sm border border-outline-variant flex flex-col items-start gap-2">
+                            <div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center flex-shrink-0 mb-2">
+                                <svg class="w-5 h-5 text-on-error-container" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                            </div>
+                            <p class="text-headline-md text-on-surface">241</p>
+                            <p class="text-label-sm text-on-surface-variant">Anomalies Flagged</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Widgets -->
+        <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm p-6 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h2 class="text-headline-md text-on-surface">District Compliance Map</h2>
+                            <p class="text-sm text-on-surface-variant mt-1">Field coverage, sync health, and exception density by district.</p>
+                        </div>
+                        <span class="chip blue"><span class="status-dot bg-primary"></span>Live demo feed</span>
+                    </div>
+                    <div class="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
+                        <div class="bg-surface-container rounded-lg border border-outline-variant p-4 min-h-[400px]">
+                            <div class="district-grid">
+                                <div class="district-cell safe"><strong>Bengaluru Rural</strong><span>99% verified</span></div>
+                                <div class="district-cell watch"><strong>Hassan</strong><span>82% verified</span></div>
+                                <div class="district-cell safe"><strong>Mandya</strong><span>96% verified</span></div>
+                                <div class="district-cell risk"><strong>Belagavi</strong><span>41 flags</span></div>
+                                <div class="district-cell safe"><strong>Mysuru</strong><span>94% verified</span></div>
+                                <div class="district-cell watch"><strong>Ballari</strong><span>GPS drift</span></div>
+                                <div class="district-cell safe"><strong>Tumakuru</strong><span>91% verified</span></div>
+                                <div class="district-cell risk"><strong>Vijayapura</strong><span>28 flags</span></div>
+                                <div class="district-cell safe"><strong>Shivamogga</strong><span>97% verified</span></div>
+                                <div class="district-cell watch"><strong>Kalaburagi</strong><span>Late sync</span></div>
+                                <div class="district-cell safe"><strong>Dharwad</strong><span>93% verified</span></div>
+                                <div class="district-cell safe"><strong>Udupi</strong><span>98% verified</span></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 mt-5">
+                                <div class="text-center bg-surface rounded-lg border border-outline-variant p-3"><p class="text-xl font-bold text-primary">31</p><p class="text-xs text-on-surface-variant">Districts</p></div>
+                                <div class="text-center bg-surface rounded-lg border border-outline-variant p-3"><p class="text-xl font-bold text-tertiary">6,842</p><p class="text-xs text-on-surface-variant">Villages</p></div>
+                                <div class="text-center bg-surface rounded-lg border border-outline-variant p-3"><p class="text-xl font-bold text-error">241</p><p class="text-xs text-on-surface-variant">Flags</p></div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <div class="bg-surface-container-low rounded-lg border border-outline-variant p-4">
+                                <div class="flex items-center justify-between mb-2"><span class="text-sm font-bold text-on-surface">FMD drive coverage</span><span class="text-sm text-primary font-bold">86%</span></div>
+                                <div class="mini-progress"><span style="width:86%;background:#004cca"></span></div>
+                            </div>
+                            <div class="bg-surface-container-low rounded-lg border border-outline-variant p-4">
+                                <div class="flex items-center justify-between mb-2"><span class="text-sm font-bold text-on-surface">GPS match rate</span><span class="text-sm text-tertiary font-bold">92%</span></div>
+                                <div class="mini-progress"><span style="width:92%;background:#005d86"></span></div>
+                            </div>
+                            <div class="bg-surface-container-low rounded-lg border border-outline-variant p-4">
+                                <div class="flex items-center justify-between mb-2"><span class="text-sm font-bold text-on-surface">Cold-chain confirmations</span><span class="text-sm text-primary font-bold">74%</span></div>
+                                <div class="mini-progress"><span style="width:74%;background:#0077aa"></span></div>
+                            </div>
+                            <div class="bg-error-container rounded-lg border border-error/20 p-4">
+                                <p class="text-sm font-bold text-on-error-container mb-2">Priority review queue</p>
+                                <ul class="space-y-2 text-sm text-on-error-container">
+                                    <li>Belagavi: 19 duplicate proof images</li>
+                                    <li>Vijayapura: 11 expired vial entries</li>
+                                    <li>Ballari: 8 impossible route logs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6 flex flex-col">
+                    <h2 class="text-headline-md text-on-surface mb-6">Recent Activity</h2>
+                    <div class="space-y-6 flex-grow overflow-y-auto max-h-[400px] pr-2">
+                        <div class="flex gap-4"><div class="mt-1 w-2 h-2 rounded-full bg-primary flex-shrink-0"></div><div><p class="text-body-md text-on-surface font-medium">FMD Vaccine Logged</p><p class="text-body-md text-on-surface-variant">Batch #8829 - Hassan District</p><p class="text-label-sm text-outline mt-1">2 mins ago</p></div></div>
+                        <div class="flex gap-4"><div class="mt-1 w-2 h-2 rounded-full bg-error flex-shrink-0"></div><div><p class="text-body-md text-on-surface font-medium">Anomaly Detected</p><p class="text-body-md text-on-surface-variant">Duplicate ear tag entry #A491</p><p class="text-label-sm text-outline mt-1">15 mins ago</p></div></div>
+                        <div class="flex gap-4"><div class="mt-1 w-2 h-2 rounded-full bg-secondary flex-shrink-0"></div><div><p class="text-body-md text-on-surface font-medium">Data Sync Completed</p><p class="text-body-md text-on-surface-variant">450 new records imported</p><p class="text-label-sm text-outline mt-1">1 hour ago</p></div></div>
+                        <div class="flex gap-4"><div class="mt-1 w-2 h-2 rounded-full bg-primary flex-shrink-0"></div><div><p class="text-body-md text-on-surface font-medium">Brucellosis Vaccine Logged</p><p class="text-body-md text-on-surface-variant">Batch #1102 - Mandya District</p><p class="text-label-sm text-outline mt-1">2 hours ago</p></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header"><h3>Officer Workload Snapshot</h3><span class="chip green">Today</span></div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Officer</th><th>District</th><th>Assigned</th><th>Completed</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Dr. Kavya N.</td><td>Hassan</td><td>420</td><td>391</td><td><span class="chip green">On Track</span></td></tr>
+                                <tr><td>Dr. Ramesh P.</td><td>Belagavi</td><td>510</td><td>338</td><td><span class="chip amber">Review</span></td></tr>
+                                <tr><td>Dr. Aisha K.</td><td>Mysuru</td><td>365</td><td>349</td><td><span class="chip green">On Track</span></td></tr>
+                                <tr><td>Dr. Manoj S.</td><td>Ballari</td><td>280</td><td>216</td><td><span class="chip red">Delayed</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-4">Vaccine Stock Watch</h3>
+                    <div class="space-y-4">
+                        <div><div class="flex justify-between text-sm mb-2"><strong>FMD</strong><span>18,420 doses</span></div><div class="mini-progress"><span style="width:78%;background:#004cca"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><strong>Brucella S19</strong><span>6,110 doses</span></div><div class="mini-progress"><span style="width:42%;background:#d97706"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><strong>HS + BQ</strong><span>9,800 doses</span></div><div class="mini-progress"><span style="width:61%;background:#005d86"></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-headline-md text-on-surface">Campaign Timeline</h3>
+                        <span class="chip blue">June cycle</span>
+                    </div>
+                    <div class="space-y-5">
+                        <div class="flex gap-4"><div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-primary">inventory_2</span></div><div><p class="font-bold text-on-surface">Dose allocation locked</p><p class="text-sm text-on-surface-variant">State store issued district-wise FMD and HS+BQ batches.</p><p class="text-xs text-outline mt-1">June 01 - Completed</p></div></div>
+                        <div class="flex gap-4"><div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary-container">local_shipping</span></div><div><p class="font-bold text-on-surface">Taluk dispatch underway</p><p class="text-sm text-on-surface-variant">Cold-chain vehicles reporting temperature logs every 4 hours.</p><p class="text-xs text-outline mt-1">June 08 - In progress</p></div></div>
+                        <div class="flex gap-4"><div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center"><span class="material-symbols-outlined text-error">fact_check</span></div><div><p class="font-bold text-on-surface">Audit reconciliation</p><p class="text-sm text-on-surface-variant">Duplicate image and GPS exceptions reviewed by district officers.</p><p class="text-xs text-outline mt-1">June 20 - Scheduled</p></div></div>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-5">Species Coverage</h3>
+                    <div class="space-y-4">
+                        <div><div class="flex justify-between text-sm mb-2"><span>Cattle</span><strong>63%</strong></div><div class="mini-progress"><span style="width:63%;background:#004cca"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><span>Buffalo</span><strong>21%</strong></div><div class="mini-progress"><span style="width:21%;background:#005d86"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><span>Sheep/Goat</span><strong>16%</strong></div><div class="mini-progress"><span style="width:16%;background:#059669"></span></div></div>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-5">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="window.navigateTo('tool')" class="btn-tool flex flex-col items-center gap-2"><span class="material-symbols-outlined">upload_file</span>Upload</button>
+                        <button onclick="window.navigateTo('security')" class="btn-tool flex flex-col items-center gap-2"><span class="material-symbols-outlined">shield</span>Audit</button>
+                        <button onclick="window.navigateTo('diseases')" class="btn-tool flex flex-col items-center gap-2"><span class="material-symbols-outlined">vaccines</span>Protocols</button>
+                        <button onclick="window.navigateTo('news')" class="btn-tool flex flex-col items-center gap-2"><span class="material-symbols-outlined">campaign</span>Orders</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="bg-surface-container py-16 px-4 sm:px-6 lg:px-8 text-center border-t border-outline-variant">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-headline-md text-primary mb-4">Ready to process field data?</h2>
+                <p class="text-on-surface-variant mb-8 text-body-lg">Upload your Excel sheets to generate instant fraud and scheduling alerts.</p>
+                <button onclick="window.navigateTo('tool')" class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary font-bold py-4 px-8 rounded-xl shadow-md transition-colors duration-200 uppercase tracking-wide text-label-md">Launch Manage Data Tool</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== VIEW: DISEASES ==================== -->
+    <div id="view-diseases" class="view-container">
+        <div class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-8">
+            <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+                <div class="flex flex-col gap-2 max-w-2xl">
+                    <h1 class="font-headline-lg text-headline-lg text-primary">Disease Directory</h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">Comprehensive database of common livestock diseases, complete with clinical signs, preventative measures, and official vaccination protocols.</p>
+                </div>
+            </section>
+            <div class="flex flex-col lg:flex-row gap-6">
+                <div class="flex-grow flex flex-col gap-8 lg:w-2/3 xl:w-3/4">
+                    <!-- Featured Spotlight -->
+                    <section class="bg-primary-container text-on-primary-container rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center shadow-sm">
+                        <div class="flex-1 flex flex-col gap-2">
+                            <span class="font-label-sm text-label-sm bg-primary text-on-primary px-3 py-1 rounded-full w-max mb-2">Featured Spotlight</span>
+                            <h2 class="font-headline-lg text-headline-lg">Bovine Viral Diarrhea (BVD)</h2>
+                            <p class="font-body-md text-body-md opacity-90 max-w-lg">A complex viral infection causing respiratory and reproductive issues in cattle. Early detection, biosecurity measures, and routine vaccination are critical for maintaining overall herd health and productivity.</p>
+                            <button class="mt-4 bg-surface text-primary font-label-md text-label-md px-6 py-2 rounded-lg w-max hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-2">
+                                View Protocol <span class="material-symbols-outlined">arrow_forward</span>
+                            </button>
+                        </div>
+                    </section>
+                    <!-- Disease Cards -->
+                    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <article class="bg-surface border border-outline rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                            <div class="h-48 w-full relative overflow-hidden bg-surface-container-low">
+                                <img class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8Rscni9jseD_oQf1JC7TLikZ4XgT4_-hzEcbKE-Pj79MDNMjgR0q_La6ey14j361LIUET9LVVSLO_Yp249CfxBP0gRBxsV-7AW84iKXjpt8nKpT7I7Doq_kWZRlPZcw66nVhzKFkm5KYjB8s5TBjreQi4UGIaV2fidZQX_AYbXinJVN6wA1RgBjg6dkhpd2aZIzoWmKZnaSjBD6ve_pW4nLhsO_BJ6ZT6HMT-sOKe9OCFAXpoBX-EpQwssSCj1IDSbIjWMxNAID4">
+                                <div class="absolute top-4 left-4 flex gap-2">
+                                    <span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">High Risk</span>
+                                    <span class="bg-surface/80 backdrop-blur-sm text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Bovine, Porcine</span>
+                                </div>
+                            </div>
+                            <div class="p-4 flex flex-col flex-grow gap-4">
+                                <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Foot and Mouth Disease (FMD)</h2>
+                                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">A highly contagious viral disease affecting cloven-hoofed animals. Characterized by fever and blister-like lesions on the tongue, lips, mouth, teats, and between the hooves.</p>
+                                <div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+                                    <div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined text-xl">biotech</span><span class="font-label-sm text-label-sm">Viral Pathogen</span></div>
+                                    <button class="text-primary font-label-md text-label-md flex items-center gap-1">View Protocol <span class="material-symbols-outlined">arrow_forward</span></button>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="bg-surface border border-outline rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                            <div class="h-48 w-full relative overflow-hidden bg-surface-container-low">
+                                <img class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIAcAyGDXFcdGMtcUC9DC74I8OvZ4TT32ASa5OTGbxOCaiWo3u20ER51dv7lFzYUr1vcR9MYpjByc5qunCLNbiV9T-cVT4JUEkZIwNFOQoPqaZsarIh2fU5k-o57QdW8erKw8CnFDRulIs5C13HbBaRgbDCwyHLoBNNTIFTmndB8fgF5q79nX_1_cb4stMa0tp0yTJXqmsuorzb4oikVo5xJ4_VAD4JNenFU0T2AcEUCHu8RgZnEoDbxymU0_d0WxZjpmQTWCvzxE">
+                                <div class="absolute top-4 left-4 flex gap-2">
+                                    <span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Zoonotic</span>
+                                    <span class="bg-surface/80 backdrop-blur-sm text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">Bovine, Ovine</span>
+                                </div>
+                            </div>
+                            <div class="p-4 flex flex-col flex-grow gap-4">
+                                <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Brucellosis</h2>
+                                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">A bacterial infection causing reproductive failures, including abortions and infertility in livestock. Highly significant due to its zoonotic potential affecting human health.</p>
+                                <div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+                                    <div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined text-xl">bug_report</span><span class="font-label-sm text-label-sm">Bacterial Pathogen</span></div>
+                                    <button class="text-primary font-label-md text-label-md flex items-center gap-1">View Protocol <span class="material-symbols-outlined">arrow_forward</span></button>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="bg-surface border border-outline rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+                            <div class="h-48 w-full relative overflow-hidden bg-surface-container-low">
+                                <img class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbJ6FV1Buv_gNWnWbEhrwjvtPRlPKTDewnqMT4LFeGyNsl70-P_ni1mbs6b95eifwERKs352RBUqaTXSJns5hjRi9JIx8B7N_kBMaFcg1LBV8_n7wcFNCqLQ9HOWt3Tb7COKjhtFOIN6oaaOBNnVBOzSMhMToIH_u4q8WBjUOQkHMQPYAao5lPayie2dwVpemOBvBXAovKn-5EQSZKj829Fa_bv4aOWdbUE3hEwgswswbYlMYq-TCfakR3cR5vwxwaqE5nVrhGits">
+                                <div class="absolute top-4 left-4 flex gap-2">
+                                    <span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">High Risk</span>
+                                    <span class="bg-surface/80 backdrop-blur-sm text-on-surface font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">All Species</span>
+                                </div>
+                            </div>
+                            <div class="p-4 flex flex-col flex-grow gap-4">
+                                <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Anthrax</h2>
+                                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">An acute infectious disease caused by spore-forming bacteria. It can cause rapid death in livestock and poses severe risks to humans handling infected animals or products.</p>
+                                <div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+                                    <div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined text-xl">warning</span><span class="font-label-sm text-label-sm">Spore-forming</span></div>
+                                    <button class="text-primary font-label-md text-label-md flex items-center gap-1">View Protocol <span class="material-symbols-outlined">arrow_forward</span></button>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                        <div class="panel-header">
+                            <h3>Vaccination Protocol Matrix</h3>
+                            <span class="chip blue">District reference</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="ops-table">
+                                <thead><tr><th>Disease</th><th>Target Animal</th><th>Schedule</th><th>Booster</th><th>Field Priority</th></tr></thead>
+                                <tbody>
+                                    <tr><td>FMD</td><td>Cattle, Buffalo, Goat</td><td>Every 6 months</td><td>Required</td><td><span class="chip red">High</span></td></tr>
+                                    <tr><td>Brucellosis</td><td>Female calves</td><td>4-8 months age</td><td>Not routine</td><td><span class="chip amber">Focused</span></td></tr>
+                                    <tr><td>HS + BQ</td><td>Cattle, Buffalo</td><td>Before monsoon</td><td>Annual</td><td><span class="chip amber">Seasonal</span></td></tr>
+                                    <tr><td>PPR</td><td>Sheep, Goat</td><td>Campaign mode</td><td>As advised</td><td><span class="chip green">Stable</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                            <span class="chip red mb-3">Outbreak watch</span>
+                            <h3 class="text-headline-md text-on-surface mb-2">High-risk clusters</h3>
+                            <p class="text-sm text-on-surface-variant">12 villages marked for enhanced FMD observation based on recent movement records.</p>
+                        </div>
+                        <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                            <span class="chip amber mb-3">Seasonal</span>
+                            <h3 class="text-headline-md text-on-surface mb-2">Monsoon diseases</h3>
+                            <p class="text-sm text-on-surface-variant">HS and BQ boosters prioritized before rainfall peaks in northern districts.</p>
+                        </div>
+                        <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                            <span class="chip green mb-3">Awareness</span>
+                            <h3 class="text-headline-md text-on-surface mb-2">Farmer advisories</h3>
+                            <p class="text-sm text-on-surface-variant">Handouts prepared for quarantine, reporting, and vaccine follow-up instructions.</p>
+                        </div>
+                    </section>
+                </div>
+                <!-- Sidebar -->
+                <aside class="w-full lg:w-1/3 xl:w-1/4 flex flex-col gap-4">
+                    <div class="bg-error-container text-on-error-container rounded-xl p-4 flex flex-col gap-2 border border-error/20 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-error">emergency</span><h3 class="font-headline-md text-headline-md text-error">Emergency Protocols</h3></div>
+                        <p class="font-body-md text-body-md mb-2">Immediate reporting required for suspected cases of FMD, Anthrax, or other highly contagious diseases.</p>
+                        <a class="flex items-center gap-2 bg-surface-container-lowest/60 p-3 rounded-lg hover:bg-surface-container-lowest transition-colors shadow-sm" href="#"><span class="material-symbols-outlined">call</span><span class="font-label-md text-label-md">National Vet Hotline</span></a>
+                        <a class="flex items-center gap-2 bg-surface-container-lowest/60 p-3 rounded-lg hover:bg-surface-container-lowest transition-colors shadow-sm" href="#"><span class="material-symbols-outlined">policy</span><span class="font-label-md text-label-md">View Action Plan</span></a>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-4 flex flex-col gap-2 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-tertiary">notifications_active</span><h3 class="font-headline-md text-headline-md text-on-surface">Recent Alerts</h3></div>
+                        <ul class="flex flex-col gap-4">
+                            <li class="border-b border-outline-variant pb-3"><span class="font-label-sm text-label-sm text-primary mb-1 block">Oct 24, 2024</span><h4 class="font-label-md text-label-md text-on-surface mb-1">Avian Influenza Update</h4><p class="font-body-md text-sm text-on-surface-variant">New surveillance zones established in Region 4.</p></li>
+                            <li class="border-b border-outline-variant pb-3"><span class="font-label-sm text-label-sm text-primary mb-1 block">Oct 20, 2024</span><h4 class="font-label-md text-label-md text-on-surface mb-1">Bluetongue Virus</h4><p class="font-body-md text-sm text-on-surface-variant">Seasonal vaccination window closing next week.</p></li>
+                            <li><span class="font-label-sm text-label-sm text-primary mb-1 block">Oct 15, 2024</span><h4 class="font-label-md text-label-md text-on-surface mb-1">ASF Monitoring</h4><p class="font-body-md text-sm text-on-surface-variant">Heightened biosecurity for swine facilities.</p></li>
+                        </ul>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 mb-4"><span class="material-symbols-outlined text-primary">science</span><h3 class="font-headline-md text-headline-md text-on-surface">Sample Lab Queue</h3></div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-sm"><span>Serology samples</span><strong>128</strong></div>
+                            <div class="flex items-center justify-between text-sm"><span>PCR confirmation</span><strong>42</strong></div>
+                            <div class="flex items-center justify-between text-sm"><span>Cold-chain rejects</span><strong class="text-error">7</strong></div>
+                            <div class="flex items-center justify-between text-sm"><span>Reports ready</span><strong class="text-primary">83</strong></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW: SECURITY ==================== -->
+    <div id="view-security" class="view-container">
+        <div class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-8">
+            <h1 class="font-headline-lg text-headline-lg text-primary mb-4">Security Protocols</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl">Ensuring data integrity and fraud prevention through multi-layered verification and AI cross-checking.</p>
+            <div class="bg-surface border border-outline-variant rounded-xl p-8 shadow-sm mb-8">
+                <h2 class="text-headline-md text-on-surface mb-8 text-center">How VaxLivestock Secures Data</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center flex flex-col items-center gap-3">
+                        <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary-container text-3xl">public</span></div>
+                        <h3 class="text-label-md font-bold">1. Field Data Entry</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">Vets log vaccination data offline in remote villages using the mobile portal.</p>
+                    </div>
+                    <div class="text-center flex flex-col items-center gap-3">
+                        <div class="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-on-tertiary-fixed text-3xl">shield</span></div>
+                        <h3 class="text-label-md font-bold">2. AI Fraud Scan</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">System cross-checks GPS coordinates and timestamps to detect impossible travel logs.</p>
+                    </div>
+                    <div class="text-center flex flex-col items-center gap-3">
+                        <div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary-container text-3xl">verified</span></div>
+                        <h3 class="text-label-md font-bold">3. Secure Database</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">Verified records are locked into the central state database for permanent storage.</p>
+                    </div>
+                    <div class="text-center flex flex-col items-center gap-3">
+                        <div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center"><span class="material-symbols-outlined text-on-error-container text-3xl">report</span></div>
+                        <h3 class="text-label-md font-bold">4. Real-time Action</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">Anomalies are immediately flagged to district officers for supply chain auditing.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header"><h3>Fraud Signal Rules</h3><span class="chip amber">Active engine</span></div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Signal</th><th>Trigger</th><th>Weight</th><th>Action</th></tr></thead>
+                            <tbody>
+                                <tr><td>GPS Mismatch</td><td>Assigned village differs from captured GPS village</td><td>+40</td><td><span class="chip amber">Officer review</span></td></tr>
+                                <tr><td>Impossible Speed</td><td>Vaccination count exceeds practical time threshold</td><td>+20</td><td><span class="chip blue">Audit trail</span></td></tr>
+                                <tr><td>Duplicate Image</td><td>Same proof image used across multiple animals</td><td>+30</td><td><span class="chip red">Flag record</span></td></tr>
+                                <tr><td>Expired Vaccine</td><td>Vaccination date falls after vial expiry</td><td>+50</td><td><span class="chip red">Escalate</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-5">Security Health</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between"><span class="text-sm">Offline package signing</span><span class="chip green">OK</span></div>
+                        <div class="flex items-center justify-between"><span class="text-sm">District sync tokens</span><span class="chip green">OK</span></div>
+                        <div class="flex items-center justify-between"><span class="text-sm">Image hash checks</span><span class="chip amber">12 queued</span></div>
+                        <div class="flex items-center justify-between"><span class="text-sm">Manual overrides</span><span class="chip red">5 pending</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-4">Review Queue</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between"><span>High-risk records</span><strong class="text-error">37</strong></div>
+                        <div class="flex justify-between"><span>Officer clarification</span><strong>18</strong></div>
+                        <div class="flex justify-between"><span>Photo hash conflicts</span><strong>12</strong></div>
+                        <div class="flex justify-between"><span>Closed today</span><strong class="text-primary">44</strong></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header"><h3>Audit Trail</h3><span class="chip green">Immutable log</span></div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Time</th><th>Event</th><th>Source</th><th>Result</th></tr></thead>
+                            <tbody>
+                                <tr><td>10:42</td><td>Batch #8829 proof images hashed</td><td>Hassan</td><td><span class="chip green">Clean</span></td></tr>
+                                <tr><td>10:18</td><td>Manual override requested</td><td>Belagavi</td><td><span class="chip amber">Pending</span></td></tr>
+                                <tr><td>09:55</td><td>Expired vial rule triggered</td><td>Vijayapura</td><td><span class="chip red">Escalated</span></td></tr>
+                                <tr><td>09:12</td><td>Offline sync token refreshed</td><td>Mysuru</td><td><span class="chip green">Verified</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW: NEWS ==================== -->
+    <div id="view-news" class="view-container">
+        <div class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-8">
+            <h1 class="font-headline-lg text-headline-lg text-primary mb-8">Latest Directives & Circulars</h1>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 flex flex-col gap-4">
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between mb-2"><span class="text-primary font-medium text-sm">Policy Update</span><span class="text-on-surface-variant text-xs">June 12, 2026</span></div>
+                        <h3 class="text-label-md text-on-surface mb-2">Mandatory GPS Syncing for all FMD Drives</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">Effective immediately, all field agents must ensure mobile GPS is active during offline logging. Records submitted without geographical metadata will automatically be flagged for secondary review.</p>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between mb-2"><span class="text-tertiary font-medium text-sm">System Alert</span><span class="text-on-surface-variant text-xs">June 10, 2026</span></div>
+                        <h3 class="text-label-md text-on-surface mb-2">Scheduled Server Maintenance</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">The central database will undergo routine optimization on Saturday from 02:00 AM to 04:00 AM IST. Offline syncing will be temporarily delayed during this window.</p>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between mb-2"><span class="text-error font-medium text-sm">Field Advisory</span><span class="text-on-surface-variant text-xs">June 08, 2026</span></div>
+                        <h3 class="text-label-md text-on-surface mb-2">Cold-chain Temperature Audit</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">District stores must upload temperature logs with batch dispatch records. Missing temperature proof will place vaccine lots into the review queue.</p>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between mb-2"><span class="text-primary font-medium text-sm">Training Notice</span><span class="text-on-surface-variant text-xs">June 05, 2026</span></div>
+                        <h3 class="text-label-md text-on-surface mb-2">Excel Upload Format Refresher</h3>
+                        <p class="text-body-md text-on-surface-variant text-sm">All taluk data operators are requested to use the latest column format for proof image names, village codes, and vaccine expiry dates.</p>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                        <div class="panel-header"><h3>Upcoming Review Calendar</h3><span class="chip blue">This month</span></div>
+                        <div class="table-responsive">
+                            <table class="ops-table">
+                                <thead><tr><th>Date</th><th>Review</th><th>Owner</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    <tr><td>June 20</td><td>Belagavi anomaly review</td><td>State Audit Cell</td><td><span class="chip amber">Scheduled</span></td></tr>
+                                    <tr><td>June 22</td><td>FMD campaign progress</td><td>District Officers</td><td><span class="chip blue">Prep</span></td></tr>
+                                    <tr><td>June 28</td><td>Cold-chain reconciliation</td><td>Stores Team</td><td><span class="chip green">Open</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-primary-fixed rounded-xl p-6 border border-primary-fixed-dim shadow-sm">
+                        <h3 class="text-headline-md text-on-primary-fixed mb-6 font-bold">Quick Links & Support</h3>
+                        <ul class="flex flex-col gap-4">
+                            <li><a href="#" class="text-primary text-sm flex items-center gap-2"><span class="material-symbols-outlined">download</span> Download Offline User Manual (PDF)</a></li>
+                            <li><a href="#" class="text-primary text-sm flex items-center gap-2"><span class="material-symbols-outlined">description</span> View District-wise Targets 2026</a></li>
+                            <li><a href="#" class="text-primary text-sm flex items-center gap-2"><span class="material-symbols-outlined">bug_report</span> Report App Glitch</a></li>
+                            <li><a href="#" class="text-primary text-sm flex items-center gap-2"><span class="material-symbols-outlined">call</span> Contact State Helpdesk</a></li>
+                        </ul>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm mt-6">
+                        <h3 class="text-headline-md text-on-surface mb-4">Helpdesk Load</h3>
+                        <div class="space-y-4">
+                            <div><div class="flex justify-between text-sm mb-2"><span>Login issues</span><strong>18</strong></div><div class="mini-progress"><span style="width:40%;background:#004cca"></span></div></div>
+                            <div><div class="flex justify-between text-sm mb-2"><span>Upload errors</span><strong>31</strong></div><div class="mini-progress"><span style="width:68%;background:#d97706"></span></div></div>
+                            <div><div class="flex justify-between text-sm mb-2"><span>Field sync</span><strong>12</strong></div><div class="mini-progress"><span style="width:28%;background:#059669"></span></div></div>
+                        </div>
+                    </div>
+                    <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm mt-6">
+                        <h3 class="text-headline-md text-on-surface mb-4">Document Tracker</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between gap-3"><span>June FMD order</span><span class="chip green">Issued</span></div>
+                            <div class="flex items-center justify-between gap-3"><span>Cold-chain annexure</span><span class="chip amber">Draft</span></div>
+                            <div class="flex items-center justify-between gap-3"><span>Officer roster</span><span class="chip blue">Updated</span></div>
+                            <div class="flex items-center justify-between gap-3"><span>Lab SOP revision</span><span class="chip red">Due</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header"><h3>District Bulletin Status</h3><span class="chip blue">Distribution</span></div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Bulletin</th><th>Target Group</th><th>Sent</th><th>Acknowledged</th></tr></thead>
+                            <tbody>
+                                <tr><td>GPS sync reminder</td><td>Field officers</td><td>31 districts</td><td><span class="chip green">28 confirmed</span></td></tr>
+                                <tr><td>Upload template change</td><td>Taluk operators</td><td>176 taluks</td><td><span class="chip amber">119 confirmed</span></td></tr>
+                                <tr><td>Cold-chain log mandate</td><td>Stores teams</td><td>31 districts</td><td><span class="chip blue">In progress</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-4">Training Attendance</h3>
+                    <div class="space-y-4">
+                        <div><div class="flex justify-between text-sm mb-2"><span>District admins</span><strong>91%</strong></div><div class="mini-progress"><span style="width:91%;background:#004cca"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><span>Veterinary officers</span><strong>76%</strong></div><div class="mini-progress"><span style="width:76%;background:#005d86"></span></div></div>
+                        <div><div class="flex justify-between text-sm mb-2"><span>Data operators</span><strong>68%</strong></div><div class="mini-progress"><span style="width:68%;background:#d97706"></span></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW: MANAGE DATA (TOOL) ==================== -->
+    <div id="view-tool" class="view-container">
+        <div class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-8">
+            <div class="mb-8">
+                <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Manage Field Data</h1>
+                <p class="text-body-lg text-on-surface-variant">Upload the standard <code class="bg-surface-container px-2 py-1 rounded text-sm">Livestock_Data.xlsx</code> file for instant client-side processing.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-primary">dataset</span><span class="chip blue">Input</span></div>
+                    <p class="text-2xl font-bold text-on-surface">8 columns</p>
+                    <p class="text-sm text-on-surface-variant mt-1">Minimum required schema</p>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-tertiary">rule</span><span class="chip green">Ready</span></div>
+                    <p class="text-2xl font-bold text-on-surface">4 scans</p>
+                    <p class="text-sm text-on-surface-variant mt-1">Fraud checks enabled</p>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-error">warning</span><span class="chip amber">Watch</span></div>
+                    <p class="text-2xl font-bold text-on-surface">7 days</p>
+                    <p class="text-sm text-on-surface-variant mt-1">Due-week alert window</p>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-primary">download</span><span class="chip blue">Export</span></div>
+                    <p class="text-2xl font-bold text-on-surface">2 files</p>
+                    <p class="text-sm text-on-surface-variant mt-1">Fraud and schedule XLSX</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header">
+                        <h3>Expected Upload Columns</h3>
+                        <span class="chip green">Template check</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Column</th><th>Purpose</th><th>Example</th></tr></thead>
+                            <tbody>
+                                <tr><td>Animal_ID</td><td>Unique animal record identifier</td><td>KA-HAS-00491</td></tr>
+                                <tr><td>Assigned_Village / GPS_Village</td><td>Used for location mismatch detection</td><td>Holalu</td></tr>
+                                <tr><td>Proof_Image_Name</td><td>Duplicate image fraud scan</td><td>IMG_8829.jpg</td></tr>
+                                <tr><td>Last_Vaccination_Date</td><td>Schedule calculation baseline</td><td>2026-05-14</td></tr>
+                                <tr><td>Vaccine_Expiry_Date</td><td>Expired dose validation</td><td>2026-12-31</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-4">Processing Pipeline</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-3"><span class="material-symbols-outlined text-primary">upload_file</span><div><p class="font-bold text-sm">Read spreadsheet</p><p class="text-sm text-on-surface-variant">XLSX, XLS, and CSV accepted</p></div></div>
+                        <div class="flex gap-3"><span class="material-symbols-outlined text-primary">cleaning_services</span><div><p class="font-bold text-sm">Normalize fields</p><p class="text-sm text-on-surface-variant">Whitespace and date formats cleaned</p></div></div>
+                        <div class="flex gap-3"><span class="material-symbols-outlined text-primary">travel_explore</span><div><p class="font-bold text-sm">Detect anomalies</p><p class="text-sm text-on-surface-variant">GPS, speed, image, expiry checks</p></div></div>
+                        <div class="flex gap-3"><span class="material-symbols-outlined text-primary">ios_share</span><div><p class="font-bold text-sm">Export reports</p><p class="text-sm text-on-surface-variant">Download actionable Excel outputs</p></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="bg-surface border border-outline-variant rounded-xl shadow-sm p-6">
+                    <h3 class="text-headline-md text-on-surface mb-4">Pre-upload Checklist</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span><span>One worksheet or CSV file selected</span></div>
+                        <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span><span>Animal IDs are unique within the district</span></div>
+                        <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span><span>Village names match assigned field list</span></div>
+                        <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span><span>Date columns use valid day/month/year values</span></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+                    <div class="panel-header"><h3>Sample Records Preview</h3><span class="chip blue">Reference only</span></div>
+                    <div class="table-responsive">
+                        <table class="ops-table">
+                            <thead><tr><th>Animal ID</th><th>Village</th><th>Vaccine</th><th>Last Vaccinated</th><th>Expected Result</th></tr></thead>
+                            <tbody>
+                                <tr><td>KA-HAS-00491</td><td>Holalu</td><td>FMD</td><td>2026-05-14</td><td><span class="chip green">Valid schedule</span></td></tr>
+                                <tr><td>KA-BGM-01882</td><td>Chikodi</td><td>Brucella S19</td><td>2026-03-02</td><td><span class="chip amber">Review GPS</span></td></tr>
+                                <tr><td>KA-BLR-00217</td><td>Doddaballapur</td><td>HS+BQ</td><td>2025-11-28</td><td><span class="chip red">Overdue</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Zone -->
+            <div id="upload-zone" class="upload-zone" onclick="document.getElementById('file-input').click()">
+                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.36 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                <div style="font-size:20px;color:#191b24;margin-bottom:8px">Drag & Drop Excel File</div>
+                <div style="color:#424656">or click to browse from your device</div>
+                <input type="file" id="file-input" accept=".xlsx,.xls,.csv">
+            </div>
+
+            <!-- Processing Overlay -->
+            <div id="processing-overlay" class="processing-overlay">
+                <div class="spinner"></div>
+                <h3>Analyzing Livestock Data&hellip;</h3>
+                <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+                <p class="fact-text" id="fact-text">Initializing fraud detection engine&hellip;</p>
+            </div>
+
+            <!-- Results Dashboard -->
+            <div id="dashboard-results" class="dashboard-results">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: -16px; z-index: 10; position: relative;">
+                    <button class="btn-tool flex items-center gap-2" onclick="window.resetUploadZone()" style="background: #004cca; color: #ffffff; border: none; font-weight: 600;">
+                        <span class="material-symbols-outlined text-sm">refresh</span> Process Another File
+                    </button>
+                </div>
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <h3>&#128680; Fraud Alerts</h3>
+                        <button class="btn-tool" id="btn-export-fraud">Download .xlsx</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="fraud-table">
+                            <thead><tr><th>Animal ID</th><th>Farmer</th><th>Village (Assigned &#x2192; GPS)</th><th>Score</th><th>Risk Level</th><th>Detected Flags</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <h3>&#128197; Vaccination Schedules</h3>
+                        <button class="btn-tool" id="btn-export-vax">Download .xlsx</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="vax-table">
+                            <thead><tr><th>Animal ID</th><th>Type</th><th>Farmer</th><th>Vaccine</th><th>Last Vaccinated</th><th>Next Due</th><th>Status</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-inverse-surface text-inverse-on-surface mt-auto py-12 px-4 sm:px-8">
+        <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between gap-8">
+            <div><h4 class="text-surface font-bold mb-4">VaxLivestock Platform</h4><p class="text-sm opacity-70">Ensuring transparency and health<br>across rural livestock networks.</p></div>
+            <div><h4 class="text-surface font-bold mb-4">Quick Links</h4><a href="#" onclick="window.navigateTo('home');return false" class="block text-sm opacity-70 hover:opacity-100 mb-2">Home</a><a href="#" onclick="window.navigateTo('tool');return false" class="block text-sm opacity-70 hover:opacity-100">Manage Data</a></div>
+            <div><h4 class="text-surface font-bold mb-4">Contact Support</h4><p class="text-sm opacity-70">For official department queries,<br>reach out to the administration.</p></div>
+        </div>
+        <div class="border-t border-outline mt-8 pt-6 text-center text-sm opacity-60">
+            <p>System Architecture & Development by <strong class="text-tertiary-fixed-dim">astronishinngg</strong></p>
+            <p>nishantyadawad007@gmail.com</p>
+            <p class="mt-2">100% Client-Side Processing</p>
+        </div>
+    </footer>
+
+</div><!-- /app-shell -->
+
+<!-- ======================== JAVASCRIPT ======================== -->
+<script>
+(function () {
+
+    /* ============================================================
+       NAVIGATION & AUTH
+       ============================================================ */
+    function setAuthMode(mode) {
+        var loginForm = document.getElementById('login-form');
+        var signupForm = document.getElementById('signup-form');
+        clearAuthMessage();
+        clearFieldErrors();
+        if (!loginForm || !signupForm) return;
+        loginForm.classList.toggle('active', mode === 'login');
+        signupForm.classList.toggle('active', mode === 'signup');
+    }
+
+    function clearFieldErrors() {
+        document.querySelectorAll('#view-login input').forEach(function (input) {
+            input.removeAttribute('aria-invalid');
+            input.setCustomValidity('');
+        });
+    }
+
+    function showAuthMessage(type, message) {
+        var messageEl = document.getElementById('auth-message');
+        if (!messageEl) return;
+        messageEl.className = 'auth-message active ' + type;
+        messageEl.textContent = message;
+    }
+
+    function clearAuthMessage() {
+        var messageEl = document.getElementById('auth-message');
+        if (!messageEl) return;
+        messageEl.className = 'auth-message';
+        messageEl.textContent = '';
+    }
+
+    function markInvalid(input, message) {
+        if (!input) return false;
+        input.setAttribute('aria-invalid', 'true');
+        if (message) input.setCustomValidity(message);
+        return false;
+    }
+
+    function validateEmail(input) {
+        if (!input || !input.value.trim()) return markInvalid(input, 'Official email address is required.');
+        input.setCustomValidity('');
+        if (!input.checkValidity()) return markInvalid(input, 'Enter a valid official email address.');
+        input.removeAttribute('aria-invalid');
+        return true;
+    }
+
+    function requireText(input, message) {
+        if (!input || !input.value.trim()) return markInvalid(input, message);
+        input.setCustomValidity('');
+        input.removeAttribute('aria-invalid');
+        return true;
+    }
+
+    function redirectToDashboard() {
+        document.getElementById('view-login').style.display = 'none';
+        document.getElementById('view-login').classList.remove('active');
+        document.getElementById('app-shell').style.display = 'flex';
+        window.navigateTo('home');
+    }
+
+    window.performLogin = function () {
+        try {
+            clearAuthMessage();
+            clearFieldErrors();
+            redirectToDashboard();
+        } catch (e) { console.error('Login Error:', e); }
+    };
+
+    window.registerUser = function () {
+        try {
+            clearAuthMessage();
+            clearFieldErrors();
+            var departmentInput = document.getElementById('signup-department');
+            var districtInput = document.getElementById('signup-district');
+            var emailInput = document.getElementById('signup-email');
+            var pwdInput = document.getElementById('signup-pwd');
+            var confirmInput = document.getElementById('signup-confirm-pwd');
+            var isValid = requireText(departmentInput, 'Department name is required.') &
+                requireText(districtInput, 'District name is required.') &
+                validateEmail(emailInput);
+            if (!isValid) {
+                showAuthMessage('error', 'Please complete all sign-up fields correctly.');
+                return;
+            }
+            document.getElementById('signup-form').reset();
+            setAuthMode('login');
+            showAuthMessage('success', 'Account details saved for this demo. Press Sign In to continue.');
+        } catch (e) { console.error('Sign-up Error:', e); }
+    };
+
+    window.performLogout = function () {
+        try {
+            document.getElementById('app-shell').style.display = 'none';
+            document.getElementById('view-login').style.display = 'flex';
+            document.getElementById('view-login').classList.add('active');
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-pwd').value = '';
+            var signupForm = document.getElementById('signup-form');
+            if (signupForm) signupForm.reset();
+            setAuthMode('login');
+            document.getElementById('upload-zone').style.display = 'block';
+            document.getElementById('dashboard-results').style.display = 'none';
+            document.getElementById('processing-overlay').classList.remove('active');
+        } catch (e) { console.error('Logout Error:', e); }
+    };
+
+    window.navigateTo = function (viewName) {
+        try {
+            document.querySelectorAll('.view-container').forEach(function (v) { v.classList.remove('active'); });
+            document.getElementById('view-' + viewName).classList.add('active');
+            // Update nav active states
+            document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('nav-link-active'); n.classList.add('text-on-surface-variant'); });
+            var navItem = document.getElementById('nav-' + viewName);
+            if (navItem) { navItem.classList.add('nav-link-active'); navItem.classList.remove('text-on-surface-variant'); }
+            window.scrollTo(0, 0);
+        } catch (e) { console.error('Nav Error:', e); }
+    };
+
+    /* ============================================================
+       ROBUST DATE PARSER
+       ============================================================ */
+    function parseDate(value) {
+        if (value == null || value === '') return null;
+        if (value instanceof Date) return isNaN(value) ? null : value;
+        if (typeof value === 'number' || /^\d{4,5}(\.\d+)?$/.test(String(value).trim())) {
+            var serial = parseFloat(value);
+            if (serial > 25569 && serial < 100000) return new Date((serial - 25569) * 86400000);
+        }
+        var s = String(value).trim();
+        var dmy = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+        if (dmy) {
+            var a = parseInt(dmy[1], 10), b = parseInt(dmy[2], 10), y = parseInt(dmy[3], 10);
+            if (a > 12) return new Date(y, b - 1, a);
+            if (b > 12) return new Date(y, a - 1, b);
+            return new Date(y, b - 1, a);
+        }
+        var iso = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+        if (iso) return new Date(parseInt(iso[1], 10), parseInt(iso[2], 10) - 1, parseInt(iso[3], 10));
+        var fb = new Date(s);
+        return isNaN(fb) ? null : fb;
+    }
+
+    function addDays(date, days) { var d = new Date(date); d.setDate(d.getDate() + days); return d; }
+    function sanitizeRow(raw) { var clean = {}; Object.keys(raw).forEach(function (k) { clean[k.trim()] = raw[k]; }); return clean; }
+
+    window.resetUploadZone = function() {
+        document.getElementById('dashboard-results').style.display = 'none';
+        document.getElementById('upload-zone').style.display = 'block';
+        var fileInput = document.getElementById('file-input');
+        if (fileInput) fileInput.value = '';
+    };
+
+    /* ============================================================
+       FILE HANDLING & PROCESSING
+       ============================================================ */
+    var fraudExportData = [];
+    var vaxExportData   = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('[data-auth-mode]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                setAuthMode(button.getAttribute('data-auth-mode'));
+            });
+        });
+
+        var loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                window.performLogin();
+            });
+        }
+
+        var signupForm = document.getElementById('signup-form');
+        if (signupForm) {
+            signupForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                window.registerUser();
+            });
+        }
+
+        var dropZone         = document.getElementById('upload-zone');
+        var fileInput        = document.getElementById('file-input');
+        var dashboardResults = document.getElementById('dashboard-results');
+
+        if (dropZone && fileInput) {
+            ['dragenter','dragover','dragleave','drop'].forEach(function (evt) {
+                dropZone.addEventListener(evt, function (e) { e.preventDefault(); e.stopPropagation(); }, false);
+            });
+            ['dragenter','dragover'].forEach(function (evt) {
+                dropZone.addEventListener(evt, function () { dropZone.classList.add('dragover'); }, false);
+            });
+            ['dragleave','drop'].forEach(function (evt) {
+                dropZone.addEventListener(evt, function () { dropZone.classList.remove('dragover'); }, false);
+            });
+            dropZone.addEventListener('drop', function (e) { handleFiles(e.dataTransfer.files); }, false);
+            fileInput.addEventListener('change', function (e) { handleFiles(e.target.files); }, false);
+        }
+
+        function handleFiles(files) {
+            if (!files.length) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    var data = new Uint8Array(e.target.result);
+                    var wb   = XLSX.read(data, { type: 'array', cellDates: false });
+                    var ws   = wb.Sheets[wb.SheetNames[0]];
+                    var rows = XLSX.utils.sheet_to_json(ws, { raw: false, dateNF: 'yyyy-mm-dd' });
+                    rows = rows.map(sanitizeRow);
+                    processData(rows);
+                } catch (err) {
+                    console.error('File processing error:', err);
+                    alert('Failed to parse Excel file. See console for details.');
+                }
+            };
+            reader.readAsArrayBuffer(files[0]);
+        }
+
+        function processData(data) {
+            var imageCounts = {};
+            data.forEach(function (r) { var img = r['Proof_Image_Name']; if (img) imageCounts[img] = (imageCounts[img] || 0) + 1; });
+            fraudExportData = [];
+            vaxExportData   = [];
+            var today = new Date(); today.setHours(0, 0, 0, 0);
+
+            data.forEach(function (row, idx) {
+                var fraudScore = 0, fraudReasons = [];
+                var assignedVillage = String(row['Assigned_Village'] || '').trim().toLowerCase();
+                var gpsVillage      = String(row['GPS_Village']      || '').trim().toLowerCase();
+                if (assignedVillage && gpsVillage && assignedVillage !== gpsVillage) { fraudScore += 40; fraudReasons.push('GPS Mismatch (+40)'); }
+                var vaxCount = parseFloat(row['Vaccination_Count']) || 0;
+                var timeMins = parseFloat(row['Time_Taken_Minute']) || 0;
+                if (timeMins > 0 && (vaxCount / timeMins) > 10) { fraudScore += 20; fraudReasons.push('Impossible Speed (+20)'); }
+                var proofImg = row['Proof_Image_Name'];
+                if (proofImg && imageCounts[proofImg] > 1) { fraudScore += 30; fraudReasons.push('Duplicate Image (+30)'); }
+                var lastVaxDate = parseDate(row['Last_Vaccination_Date']);
+                var expiryDate  = parseDate(row['Vaccine_Expiry_Date']);
+                if (lastVaxDate && expiryDate && lastVaxDate > expiryDate) { fraudScore += 50; fraudReasons.push('Expired Vaccine (+50)'); }
+                var riskLevel = 'SAFE';
+                if (fraudScore > 50) riskLevel = 'HIGH RISK';
+                else if (fraudScore > 20) riskLevel = 'WARNING';
+                if (fraudScore > 0 && riskLevel !== 'SAFE') {
+                    fraudExportData.push({ Animal_ID: row['Animal_ID'] || idx+1, Farmer_Name: row['Farmer_Name']||'-', Assigned_Village: row['Assigned_Village']||'-', GPS_Village: row['GPS_Village']||'-', Fraud_Score: fraudScore, Risk_Level: riskLevel, Detected_Flags: fraudReasons.join(', ') });
+                }
+                var intervalDays = parseInt(row['Vaccination_Interval_Days'], 10) || 0;
+                var nextDueDate = null, vaxStatus = 'UPCOMING';
+                if (lastVaxDate && intervalDays > 0) {
+                    nextDueDate = addDays(lastVaxDate, intervalDays); nextDueDate.setHours(0,0,0,0);
+                    var diffDays = Math.ceil((nextDueDate.getTime() - today.getTime()) / 86400000);
+                    if (diffDays < 0) vaxStatus = 'OVERDUE'; else if (diffDays <= 7) vaxStatus = 'DUE THIS WEEK';
+                } else { vaxStatus = 'UNKNOWN'; }
+                vaxExportData.push({ Animal_ID: row['Animal_ID']||idx+1, Animal_Type: row['Animal_Type']||'-', Farmer_Name: row['Farmer_Name']||'-', Vaccine_Name: row['Vaccine_Name']||'-', Last_Vaccinated: lastVaxDate ? lastVaxDate.toLocaleDateString() : '-', Next_Due_Date: nextDueDate ? nextDueDate.toLocaleDateString() : '-', Status: vaxStatus });
+            });
+
+            renderFraudTable(fraudExportData);
+            vaxExportData.sort(function (a, b) { var da = new Date(a.Next_Due_Date), db = new Date(b.Next_Due_Date); return (isNaN(da)?9e12:da) - (isNaN(db)?9e12:db); });
+            renderVaxTable(vaxExportData);
+
+            dropZone.style.display = 'none';
+            var overlay = document.getElementById('processing-overlay');
+            var progressFill = document.getElementById('progress-fill');
+            var factEl = document.getElementById('fact-text');
+            overlay.classList.add('active');
+            var facts = [
+                'Fact: Accurate vaccination tracking prevents large-scale livestock outbreaks like Foot-and-Mouth Disease (FMD).',
+                'Fact: GPS validation ensures veterinary officers are physically present in their assigned Karnataka villages.',
+                'Fact: Administering expired vaccines provides zero immunity to livestock and misuses department resources.',
+                'Fact: The system engine is currently calculating intervals and scanning logs for anomalous injection speeds\u2026'
+            ];
+            var factIdx = 0; progressFill.style.width = '0%'; factEl.textContent = facts[0];
+            var factTimer = setInterval(function () {
+                factEl.style.opacity = '0';
+                setTimeout(function () { factIdx = (factIdx + 1) % facts.length; factEl.textContent = facts[factIdx]; factEl.style.opacity = '1'; }, 350);
+            }, 3000);
+            var elapsed = 0;
+            var barTimer = setInterval(function () { elapsed += 200; progressFill.style.width = Math.min((elapsed / 12000) * 100, 100) + '%'; }, 200);
+            setTimeout(function () {
+                clearInterval(factTimer); clearInterval(barTimer);
+                progressFill.style.width = '100%';
+                overlay.classList.remove('active');
+                dashboardResults.style.display = 'flex';
+            }, 12000);
+        }
+
+        function renderFraudTable(rows) {
+            var tbody = document.querySelector('#fraud-table tbody'); if (!tbody) return; tbody.innerHTML = '';
+            if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#059669">&#9989; No suspicious records found. System clear.</td></tr>'; return; }
+            rows.forEach(function (r) {
+                var tr = document.createElement('tr');
+                var cls = r.Risk_Level === 'HIGH RISK' ? 'high-risk' : 'warning';
+                tr.innerHTML = '<td><strong>' + r.Animal_ID + '</strong></td><td>' + r.Farmer_Name + '</td><td>' + r.Assigned_Village + ' <br><span style="color:#424656;font-size:12px">&#8594; ' + r.GPS_Village + '</span></td><td style="font-weight:500">' + r.Fraud_Score + '</td><td><span class="badge ' + cls + '">' + r.Risk_Level + '</span></td><td style="color:#DC2626;font-size:13px">' + r.Detected_Flags + '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderVaxTable(rows) {
+            var tbody = document.querySelector('#vax-table tbody'); if (!tbody) return; tbody.innerHTML = '';
+            rows.forEach(function (r) {
+                var tr = document.createElement('tr');
+                var cls = 'upcoming'; if (r.Status === 'OVERDUE') cls = 'overdue'; if (r.Status === 'DUE THIS WEEK') cls = 'due-week';
+                tr.innerHTML = '<td><strong>' + r.Animal_ID + '</strong></td><td>' + r.Animal_Type + '</td><td>' + r.Farmer_Name + '</td><td>' + r.Vaccine_Name + '</td><td>' + r.Last_Vaccinated + '</td><td style="font-weight:500">' + r.Next_Due_Date + '</td><td><span class="badge ' + cls + '">' + r.Status + '</span></td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        var btnFraud = document.getElementById('btn-export-fraud');
+        var btnVax   = document.getElementById('btn-export-vax');
+        if (btnFraud) btnFraud.addEventListener('click', function () {
+            if (!fraudExportData.length) { alert('No flagged records to export.'); return; }
+            doExport(fraudExportData, 'Fraud_Alerts.xlsx');
+        });
+        if (btnVax) btnVax.addEventListener('click', function () {
+            if (!vaxExportData.length) return;
+            doExport(vaxExportData, 'Vaccination_Alerts.xlsx');
+        });
+        function doExport(arr, name) {
+            try { var ws = XLSX.utils.json_to_sheet(arr); var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Data'); XLSX.writeFile(wb, name); } catch (e) { console.error('Export error:', e); }
+        }
+    });
+})();
+</script>
+</body>
+</html>

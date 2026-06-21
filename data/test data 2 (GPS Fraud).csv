@@ -1,0 +1,4 @@
+Animal_ID,Animal_Type,Farmer_Name,Assigned_Village,GPS_Village,Vaccine_Name,Vaccination_Count,Time_Taken_Minute,Proof_Image_Name,Last_Vaccination_Date,Vaccine_Expiry_Date,Vaccination_Interval_Days
+KA-HAS-2001,Cow,Manju,Holalu,Holalu,FMD Vaccine,1,14,img2001.jpg,2026-06-10,2027-01-01,180
+KA-HAS-2002,Cow,Girish,Holalu,Bengaluru,FMD Vaccine,1,12,img2002.jpg,2026-06-10,2027-01-01,180
+KA-HAS-2003,Buffalo,Raju,Holalu,Mysuru,Brucellosis,1,10,img2003.jpg,2026-06-10,2027-01-01,365

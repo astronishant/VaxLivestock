@@ -1,0 +1,174 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Disease Directory | VaxLivestock</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary": "#ffffff",
+                "on-primary-container": "#f3f3ff",
+                "on-error-container": "#93000a",
+                "on-background": "#191b24",
+                "inverse-on-surface": "#eff0fd",
+                "tertiary-container": "#0077aa",
+                "surface-variant": "#e1e2ee",
+                "on-error": "#ffffff",
+                "primary-fixed-dim": "#b4c5ff",
+                "on-tertiary-fixed-variant": "#004c6e",
+                "secondary-fixed-dim": "#b7c8e1",
+                "tertiary-fixed-dim": "#89ceff",
+                "error-container": "#ffdad6",
+                "surface-container-highest": "#e1e2ee",
+                "secondary-container": "#d0e1fb",
+                "secondary": "#505f76",
+                "primary": "#004cca",
+                "outline-variant": "#c2c6d9",
+                "on-primary": "#ffffff",
+                "inverse-primary": "#b4c5ff",
+                "surface-container-lowest": "#ffffff",
+                "on-surface": "#191b24",
+                "on-secondary-fixed": "#0b1c30",
+                "on-tertiary-fixed": "#001e2f",
+                "on-secondary-container": "#54647a",
+                "surface-dim": "#d8d9e6",
+                "on-secondary-fixed-variant": "#38485d",
+                "primary-container": "#0062ff",
+                "surface-tint": "#0053da",
+                "surface": "#faf8ff",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed-variant": "#003ea8",
+                "inverse-surface": "#2e303a",
+                "error": "#ba1a1a",
+                "surface-container": "#ecedfa",
+                "on-surface-variant": "#424656",
+                "surface-container-low": "#f2f3ff",
+                "tertiary-fixed": "#c9e6ff",
+                "outline": "#737687",
+                "surface-bright": "#faf8ff",
+                "background": "#faf8ff",
+                "secondary-fixed": "#d3e4fe",
+                "surface-container-high": "#e7e7f4",
+                "on-tertiary-container": "#edf5ff",
+                "primary-fixed": "#dbe1ff",
+                "tertiary": "#005d86",
+                "on-primary-fixed": "#00174b"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "base": "4px",
+                "stack-md": "16px",
+                "stack-sm": "8px",
+                "margin-mobile": "16px",
+                "margin-desktop": "64px",
+                "gutter": "24px",
+                "stack-lg": "32px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg-mobile": [
+                        "Hanken Grotesk"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "40px",
+                        {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-bg {
+            background-image: linear-gradient(to bottom, rgba(250, 248, 255, 0.8), rgba(250, 248, 255, 0.95)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBo8juq9xe4nk7O9dR12HWDQ7rH6RONxR5uj2Ih5hMnpxJbCVw5EET9VuWe3JJ3aU9e8GTzyc2DVv8eKhXllC1knMWiWK9ScalLzgbH8hQwEObIezITWtwuOlze9hztx5BevZs7srDrXTWeLK4HyaALYsgs80bazdipqF_XTpotlfE8VOh1ywe0lUDjU2Zq69jb52tHU9TqWMPP125_8sMRjw0MllEhh6NcJ51fwHu5gx1Yt3nV8h2VjaHoM8la0VMNwJrvHlFZQkk');
+            background-size: cover;
+            background-position: center;
+        }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
